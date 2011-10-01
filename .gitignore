@@ -4,4 +4,7 @@
 .gradle/
 build/
 out/
+bin/
+*.class
+**/*.class
 
