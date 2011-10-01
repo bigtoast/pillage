@@ -25,7 +25,7 @@ public interface Distribution {
     public long getMinimum();
     public long getMaximum();
     public double getMean();
-    public Map<String,Long> toMap();
+    public Map<String,Number> toMap();
 
     /**
      * Create a new distribution by subtracting another distribution from this one. This is useful for creating deltas.

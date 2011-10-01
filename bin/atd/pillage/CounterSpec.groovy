@@ -12,26 +12,22 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'groovy'
-apply plugin: 'eclipse'
+package atd.pillage
 
-sourceCompatibility = 1.6
-version = '0.1.0'
+import atd.pillage.Counter
+import spock.lang.*
 
-repositories {
-    mavenCentral()
-}
+class CounterSpec extends Specification {
 
-dependencies {
-    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.1'
-    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.10'
-    testCompile group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.7'
-}
+   def "A counter should increment"() {
 
-ideaModule {
-    whenConfigured { module ->
-        module.dependencies*.exported = true
-    }
+       def counter = new Counter()
+
+       expect :
+        counter.value() == 0
+        counter.incr() == 1
+        counter.incr(5) == 6
+        counter.value() == 6
+   }
+
 }
