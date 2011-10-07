@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'artifactory'
 
 sourceCompatibility = 1.6
-version = '0.1.0'
+version = '0.2.0'
 
 group = "atd"
 
@@ -47,8 +47,10 @@ repositories {
 }
 
 dependencies {
-    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.10'
-    testCompile group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.7'
+    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.8.2'
+    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.8' ){
+		exclude(group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.8.0-beta-3-SNAPSHOT')
+	}
 }
 
 ideaModule {

@@ -28,7 +28,7 @@ public class StatsAccessorMBean implements DynamicMBean {
 
     @Override
     public Object getAttribute(String attribute) throws AttributeNotFoundException, MBeanException, ReflectionException {
-     StatsSummary stats = accessor.getFilteredSummary();
+     StatsSummary stats = accessor.getDeltaSummary();
      
      if(stats.getCounters().containsKey(attribute)){
     	 return stats.getCounters().get(attribute);
@@ -53,7 +53,7 @@ public class StatsAccessorMBean implements DynamicMBean {
 
     @Override
     public AttributeList getAttributes(String[] attributes) {
-    	StatsSummary stats = accessor.getSummary();
+    	StatsSummary stats = accessor.getDeltaSummary();
         AttributeList list = new AttributeList();
         for(String attribute :attributes){
         	if( stats.getCounters().containsKey(attribute)){
@@ -82,7 +82,7 @@ public class StatsAccessorMBean implements DynamicMBean {
 
     @Override
     public MBeanInfo getMBeanInfo() {
-    	StatsSummary stats = accessor.getFilteredSummary();
+    	StatsSummary stats = accessor.getDeltaSummary();
     	MBeanAttributeInfo[] attrs = new MBeanAttributeInfo[stats.getCounters().size() + 
     	                                                    stats.getLabels().size()   +
     	                                                    stats.getMetrics().size() 

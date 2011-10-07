@@ -111,8 +111,8 @@ public class HistogramSpec extends Specification {
 
       then:
         def histClone = hist1.clone()
-        hist1._buckets.toList().containsAll(histClone._buckets.toList()) == true
-        histClone._buckets.toList().containsAll( hist1._buckets.toList()) == true
+        hist1.buckets.toList().containsAll(histClone.buckets.toList()) == true
+        histClone.buckets.toList().containsAll( hist1.buckets.toList()) == true
         hist1.count == histClone.count
     }
 
@@ -216,7 +216,7 @@ public class HistogramSpec extends Specification {
       expect:
         hist1.count == hist2.count
         hist1.sum == hist2.sum
-        hist1._buckets == hist2._buckets
+        hist1.buckets == hist2.buckets
         hist1.equals( hist2 ) == true
       when:
         hist1.add(10)

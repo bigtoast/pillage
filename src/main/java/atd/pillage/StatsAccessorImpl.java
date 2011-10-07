@@ -38,9 +38,6 @@ class StatsAccessorImpl implements StatsAccessor {
     private Map<String, Distribution> lastMetricMap = new HashMap<String, Distribution>();
     private Map<String, Distribution> deltaMetricMap = new HashMap<String, Distribution>();
     
-    //@TODO move filters somewhere else.
-    private Pattern filterRegex;
-    
     
     @Override
 	public StatsSummary getFullSummary() {
@@ -66,6 +63,10 @@ class StatsAccessorImpl implements StatsAccessor {
 		}
 	}
 
+	/**
+	 * A snap reporter is essentially a snap listener. A reporter will 
+	 * recieve a StatsSummary object.
+	 */
 	@Override
 	public void addSnapReporter(StatsReporter reporter) {
 		synchronized(this) {
@@ -80,7 +81,7 @@ class StatsAccessorImpl implements StatsAccessor {
 		}
 	}
 
-	public StatsAccessorImpl(StatsContainer container, boolean startClean, List<Pattern> filters) {
+	public StatsAccessorImpl(StatsContainer container, boolean startClean) {
         if (startClean) {
             for (Map.Entry<String, Long> entry : container.getCounters().entrySet()) {
                 lastCounterMap.put(entry.getKey(), entry.getValue());
@@ -88,20 +89,6 @@ class StatsAccessorImpl implements StatsAccessor {
             for (Map.Entry<String, Distribution> entry : container.getMetrics().entrySet()) {
                 lastMetricMap.put(entry.getKey(), entry.getValue());
             }
-        }
-
-        if (filters.size() > 0) {
-            StringBuilder str = new StringBuilder();
-            str.append("(");
-            for (Pattern pattern : filters) {
-                str.append(pattern.toString());
-                str.append(")|(");
-            }
-            str.delete(str.length() - 3, str.length() - 1);
-            str.append(")");
-            filterRegex = Pattern.compile(str.toString());
-        } else {
-            filterRegex = Pattern.compile("()");
         }
 
     }
