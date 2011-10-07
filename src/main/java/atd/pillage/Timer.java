@@ -23,192 +23,215 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Timer implements Serializable, Cloneable {
 
-   public static class TimerMetric{
-       private String _name;
-       private long _value;
+	private static final long serialVersionUID = -8365175010198525518L;
 
-       public TimerMetric(String name, long value){
-           _name = name;
-           _value = value;
-       }
+	public static class TimerMetric {
+		private String _name;
+		private long _value;
 
-       public String getName(){ return _name; }
-       public long getValue(){ return _value; }
-       public String toString(){
-           StringBuilder str = new StringBuilder();
-           str.append(_name);
-           str.append("[");
-           str.append(_value);
-           str.append("]");
-           return str.toString();
-       }
-   }
+		public TimerMetric(String name, long value) {
+			_name = name;
+			_value = value;
+		}
 
-   private long _startTime = 0;
-   private long _elapsedTime = 0;
+		public String getName() {
+			return _name;
+		}
 
-   private String _name;
-   private String _safeName;
-   private StatsProvider _provider;
-   private AtomicBoolean _running = new AtomicBoolean(false);
-   private ConcurrentLinkedQueue<TimerMetric> _queue = new ConcurrentLinkedQueue<TimerMetric>();
+		public long getValue() {
+			return _value;
+		}
 
-   public Timer(StatsProvider provider, String name){
-      this(provider, name, false);
-   }
+		public String toString() {
+			StringBuilder str = new StringBuilder();
+			str.append(_name);
+			str.append("[");
+			str.append(_value);
+			str.append("]");
+			return str.toString();
+		}
+	}
 
-   public Timer(StatsProvider provider, String name, boolean start ){
-       _name = name;
-       _safeName = name.replace(" ", "_");
-       _provider = provider;
-       if( start )
-           start();
-   }
+	private long _startTime = 0;
+	private long _elapsedTime = 0;
 
-   public boolean isRunning(){ return _running.get(); }
+	private String _name;
+	private String _safeName;
+	private StatsProvider _provider;
+	private AtomicBoolean _running = new AtomicBoolean(false);
+	private ConcurrentLinkedQueue<TimerMetric> _queue = new ConcurrentLinkedQueue<TimerMetric>();
 
-   /**
-     * Gets the time when this instance was created, or when one of the <tt>start()</tt> messages was last called.
-     *
-     * @return The start time in milliseconds since the epoch.
-     */
-   public long getStartTime() { return _startTime; }
+	public Timer(StatsProvider provider, String name) {
+		this(provider, name, false);
+	}
 
-   /**
-     * Gets the time in milliseconds between when this Timer was last started and stopped. Is <tt>stop()</tt> was
-     * not called, then the time returned is the time since the Timer was started.
-     *
-     * @return The elapsed time in milliseconds.
-     */
-   public long getElapsedTime() {
-       return (_elapsedTime == -1L) ?
-              System.currentTimeMillis() - _startTime :
-              _elapsedTime;
-   }
+	public Timer(StatsProvider provider, String name, boolean start) {
+		_name = name;
+		_safeName = name.replace(" ", "_");
+		_provider = provider;
+		if (start)
+			start();
+	}
 
-   /**
-     * Gets the tag used to group this Timer instance with other instances used to time the same code block.
-     *
-     * @return The grouping tag.
-     */
-   public String getName() { return _name; }
+	public boolean isRunning() {
+		return _running.get();
+	}
 
-   /**
-     * returns the name as it will appear as a statistic. Spaces are replaced with underscores.
-     *
-     * @return name with spaces replaced.
-     *
-     */
-   public String getSafeName() { return _safeName; }
+	/**
+	 * Gets the time when this instance was created, or when one of the
+	 * <tt>start()</tt> messages was last called.
+	 * 
+	 * @return The start time in milliseconds since the epoch.
+	 */
+	public long getStartTime() {
+		return _startTime;
+	}
 
-   // --- Start/Stop methods ---
+	/**
+	 * Gets the time in milliseconds between when this Timer was last started
+	 * and stopped. Is <tt>stop()</tt> was not called, then the time returned is
+	 * the time since the Timer was started.
+	 * 
+	 * @return The elapsed time in milliseconds.
+	 */
+	public long getElapsedTime() {
+		return (_elapsedTime == -1L) ? System.currentTimeMillis() - _startTime
+				: _elapsedTime;
+	}
 
-   /**
-     * Starts this Timer, which sets its startTime property to the current time and resets the elapsedTime property.
-     * For single-use Timer instance you should not need to call this method as a Timer is automatically
-     * started when it is created. Note any existing tag and message are not changed.
-     *
-     * If the watcher is already running this method acts as a reset. It will reset the start time to NOW and clear the
-     * elapsed time.
-     */
-   public void start() {
-       _startTime = System.currentTimeMillis();
-       _elapsedTime = -1L;
-       _running.set(true);
-   }
+	/**
+	 * Gets the tag used to group this Timer instance with other instances used
+	 * to time the same code block.
+	 * 
+	 * @return The grouping tag.
+	 */
+	public String getName() {
+		return _name;
+	}
 
-   /**
-     * Stops this Timer, which "freezes" its elapsed time. You should normally call this method (or one of the
-     * other stop methods) before passing this instance to a logger.
-     *
-     * @return this.toString(), which is a message suitable for logging
-     */
-   public long stop(String milestone) {
-     if( _running.getAndSet(false) == true) {
-       _elapsedTime = System.currentTimeMillis() - _startTime;
-       String mName = metricName(milestone);
-       Metric m = _provider.getMetric(mName);
-       m.add((int) _elapsedTime);
-       _queue.add(new TimerMetric(metricName(milestone), _elapsedTime));
-     }
-     return _elapsedTime;
-   }
+	/**
+	 * returns the name as it will appear as a statistic. Spaces are replaced
+	 * with underscores.
+	 * 
+	 * @return name with spaces replaced.
+	 * 
+	 */
+	public String getSafeName() {
+		return _safeName;
+	}
 
-   protected String metricName(String milestone){
-       StringBuilder str = new StringBuilder();
-       str.append(_safeName);
-       str.append("-");
-       str.append(milestone.replace(" ", "_"));
-       str.append(".millis");
-       return str.toString();
-   }
+	// --- Start/Stop methods ---
 
-   /**
-     * Stops this Timer, collect a metric and restart the timer.
-     *
-     * @param milestone     Add a milestone to the metric
-     * @return this.toString(), which is a message suitable for logging
-     */
-   public long stopAndStart(String milestone) {
-       long elapsed = stop(milestone);
-       start();
-       return elapsed;
-   }
+	/**
+	 * Starts this Timer, which sets its startTime property to the current time
+	 * and resets the elapsedTime property. For single-use Timer instance you
+	 * should not need to call this method as a Timer is automatically started
+	 * when it is created. Note any existing tag and message are not changed.
+	 * 
+	 * If the watcher is already running this method acts as a reset. It will
+	 * reset the start time to NOW and clear the elapsed time.
+	 */
+	public void start() {
+		_startTime = System.currentTimeMillis();
+		_elapsedTime = -1L;
+		_running.set(true);
+	}
 
-   // --- Object Methods ---
-   @Override
-   public String toString() {
-       StringBuilder str = new StringBuilder();
-       for(TimerMetric metric :_queue){
-           str.append(metric.toString());
-           str.append(" : ");
-       }
-       return str.toString();
-   }
+	/**
+	 * Stops this Timer, which "freezes" its elapsed time. You should normally
+	 * call this method (or one of the other stop methods) before passing this
+	 * instance to a logger.
+	 * 
+	 * @return this.toString(), which is a message suitable for logging
+	 */
+	public long stop(String milestone) {
+		if (_running.getAndSet(false) == true) {
+			_elapsedTime = System.currentTimeMillis() - _startTime;
+			String mName = metricName(milestone);
+			Metric m = _provider.getMetric(mName);
+			m.add((int) _elapsedTime);
+			_queue.add(new TimerMetric(metricName(milestone), _elapsedTime));
+		}
+		return _elapsedTime;
+	}
 
-   public Timer clone() {
-       try {
-           return (Timer) super.clone();
-       } catch (CloneNotSupportedException cnse) {
-           throw new Error("Unexpected CloneNotSupportedException");
-       }
-   }
+	protected String metricName(String milestone) {
+		StringBuilder str = new StringBuilder();
+		str.append(_safeName);
+		str.append("-");
+		str.append(milestone.replace(" ", "_"));
+		str.append(".millis");
+		return str.toString();
+	}
 
-   public boolean equals(Object o) {
-       if (this == o) {
-           return true;
-       }
-       if (!(o instanceof Timer)) {
-           return false;
-       }
+	/**
+	 * Stops this Timer, collect a metric and restart the timer.
+	 * 
+	 * @param milestone
+	 *            Add a milestone to the metric
+	 * @return this.toString(), which is a message suitable for logging
+	 */
+	public long stopAndStart(String milestone) {
+		long elapsed = stop(milestone);
+		start();
+		return elapsed;
+	}
 
-       Timer timer = (Timer) o;
+	// --- Object Methods ---
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		for (TimerMetric metric : _queue) {
+			str.append(metric.toString());
+			str.append(" : ");
+		}
+		return str.toString();
+	}
 
-       if (_elapsedTime != timer.getElapsedTime()) {
-           return false;
-       }
-       if (_startTime != timer.getStartTime()) {
-           return false;
-       }
+	public Timer clone() {
+		try {
+			return (Timer) super.clone();
+		} catch (CloneNotSupportedException cnse) {
+			throw new Error("Unexpected CloneNotSupportedException");
+		}
+	}
 
-       if(_running.get() != timer.isRunning()){
-           return false;
-       }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Timer)) {
+			return false;
+		}
 
-       if (_name != null ? !_name.equals(timer.getName()) : timer.getName() != null) {
-           return false;
-       }
+		Timer timer = (Timer) o;
 
-       return true;
-   }
+		if (_elapsedTime != timer.getElapsedTime()) {
+			return false;
+		}
+		if (_startTime != timer.getStartTime()) {
+			return false;
+		}
 
-   public int hashCode() {
-       int result;
-       result = (int) (_startTime ^ (_startTime >>> 32));
-       result = 31 * result + (int) (_elapsedTime ^ (_elapsedTime >>> 32));
-       result = 31 * result + (_name != null ? _name.hashCode() : 0);
-       result = 31 * result + (_provider != null ? _provider.hashCode() : 0);
-       result = 31 * result + (_running != null ? _running.hashCode() : 0);
-       return result;
-   }
+		if (_running.get() != timer.isRunning()) {
+			return false;
+		}
+
+		if (_name != null ? !_name.equals(timer.getName())
+				: timer.getName() != null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public int hashCode() {
+		int result;
+		result = (int) (_startTime ^ (_startTime >>> 32));
+		result = 31 * result + (int) (_elapsedTime ^ (_elapsedTime >>> 32));
+		result = 31 * result + (_name != null ? _name.hashCode() : 0);
+		result = 31 * result + (_provider != null ? _provider.hashCode() : 0);
+		result = 31 * result + (_running != null ? _running.hashCode() : 0);
+		return result;
+	}
 }

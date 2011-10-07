@@ -18,15 +18,16 @@ package atd.pillage;
  * This is a metric backed by a histogram.
  */
 public class HistogramMetric implements Metric {
-    //val log = Logger.get(getClass.getName)
 
-  private Histogram _histogram = new Histogram();
+  private Histogram histogram;
 
   public HistogramMetric( Histogram histogram) {
-      _histogram = histogram;
+      this.histogram = histogram;
   }
-
-  public HistogramMetric(){}
+  
+  public HistogramMetric(){
+	  this.histogram = new Histogram();
+  }
 
   /**
    * Resets the state of this Metric. Clears all data points collected so far.
@@ -34,7 +35,7 @@ public class HistogramMetric implements Metric {
   @Override
   public void clear() {
     synchronized(this) {
-      _histogram.clear();
+      histogram.clear();
     }
   }
 
@@ -45,11 +46,11 @@ public class HistogramMetric implements Metric {
   public long add( int n){
     if (n > -1) {
       synchronized(this) {
-        return _histogram.add(n);
+        return histogram.add(n);
       }
     } else {
       //log.warning("Tried to add a negative data point.")
-      return _histogram.getCount();
+      return histogram.getCount();
     }
   }
 
@@ -59,14 +60,14 @@ public class HistogramMetric implements Metric {
   @Override
   public long add(Distribution dist) {
     synchronized( this ){
-      _histogram.merge( ((HistogramDistribution)dist).getHistogram() );
-      return  _histogram.getCount();
+      histogram.merge( ((HistogramDistribution)dist).getHistogram() );
+      return  histogram.getCount();
     }
   }
 
   @Override
   public HistogramMetric clone(){
-    return new HistogramMetric(_histogram.clone());
+    return new HistogramMetric(histogram.clone());
   }
 
   /**
@@ -74,7 +75,7 @@ public class HistogramMetric implements Metric {
    */
   public HistogramDistribution getDistribution() {
       synchronized( this) {
-        return _histogram.getDistribution();
+        return histogram.getDistribution();
       }
   }
 

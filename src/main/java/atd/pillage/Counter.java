@@ -23,15 +23,15 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Counter {
 
-    private AtomicLong _counter = new AtomicLong(0L);
+    private AtomicLong counter = new AtomicLong(0L);
 
-    public long incr(){  return _counter.incrementAndGet(); }
-    public long incr( int i ){ return _counter.addAndGet(i); }
-    public long value(){ return _counter.get(); }
-    public void update(long l){ _counter.set(l); }
-    public void reset() { _counter.set(0); }
+    public long incr(){  return counter.incrementAndGet(); }
+    public long incr( int i ){ return counter.addAndGet(i); }
+    public long value(){ return counter.get(); }
+    public void update(long l){ counter.set(l); }
+    public void reset() { counter.set(0); }
 
     @Override
-    public String toString() { return "Counter[" + _counter.get() + "]"; }
+    public String toString() { return "Counter[" + counter.get() + "]"; }
 
 }

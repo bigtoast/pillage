@@ -17,12 +17,8 @@
 package atd.pillage;
 
 /**
- * Created by IntelliJ IDEA.
- * User: andy
- * Date: 9/28/11
- * Time: 12:27 PM
- * To change this template use File | Settings | File Templates.
+ * Create a new metric
  */
 public interface MetricFactory {
-    public Metric newMetric(String name);
+    public Metric newMetric();
 }

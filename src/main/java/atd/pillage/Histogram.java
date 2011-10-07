@@ -14,6 +14,8 @@
 
 package atd.pillage;
 
+import java.util.Arrays;
+
 /**
  * Collect data points into buckets
  */
@@ -40,8 +42,6 @@ public class Histogram implements Cloneable {
 
     public Histogram(){}
 
-    private int _bucketOffsetSize = BUCKET_OFFSETS.length;
-
     private static int binarySearch( int[] array, int key, int low, int high) {
         if (low > high) {
           return low;
@@ -63,46 +63,38 @@ public class Histogram implements Cloneable {
         return binarySearch(BUCKET_OFFSETS, key, 0, BUCKET_OFFSETS.length - 1);
     }
 
-    private Histogram create(int... values){
-        Histogram hist = new Histogram();
-        for( int i :values){
-            hist.add(i);
-        }
-        return hist;
-    }
-
     public int bucketIndex(int key){ return binarySearch(key); }
 
-    private int _numBuckets = BUCKET_OFFSETS.length + 1;
-    private long[] _buckets = new long[_numBuckets];
+    private int numBuckets = BUCKET_OFFSETS.length + 1;
+    private long[] buckets = new long[numBuckets];
 
-    private long _count = 0;
-    private long _sum = 0;
+    private long count = 0;
+    private long sum = 0;
 
-    public long getCount(){ return _count; }
-    public long getSum(){ return _sum; }
+    public long getCount(){ return count; }
+    public long getSum(){ return sum; }
 
     public long addToBucket(int index) {
-        _buckets[index]++;
-        return ++_count;
+        buckets[index]++;
+        return ++count;
     }
 
     public long add(int n){
         addToBucket(bucketIndex(n));
-        _sum += n;
-        return _count;
+        sum += n;
+        return count;
     }
 
     public void clear() {
-        for(int i=0; i < _numBuckets; i++){
-            _buckets[i] = 0;
+        for(int i=0; i < numBuckets; i++){
+            buckets[i] = 0;
         }
-        _count = 0;
-        _sum = 0;
+        count = 0;
+        sum = 0;
     }
 
     public long[] get(boolean reset){
-        long[] rv = _buckets.clone();
+        long[] rv = buckets.clone();
         if (reset) {
             clear();
         }
@@ -121,8 +113,8 @@ public class Histogram implements Cloneable {
     long total = 0L;
     int index = 0;
 
-    while (total < percentile * _count) {
-      total += _buckets[index];
+    while (total < percentile * count) {
+      total += buckets[index];
       index += 1;
     }
 
@@ -141,15 +133,15 @@ public class Histogram implements Cloneable {
    *    Int.MaxValue if any value is infinity
    */
   public int getMaximum(){
-    if (_buckets[_buckets.length - 1] > 0) {
+    if (buckets[buckets.length - 1] > 0) {
       // Infinity bucket has a value
       return Integer.MAX_VALUE;
-    } else if (_count == 0) {
+    } else if (count == 0) {
       // No values
         return 0;
     } else {
       int index = BUCKET_OFFSETS.length - 1;
-      while (index >= 0 && _buckets[index] == 0)
+      while (index >= 0 && buckets[index] == 0)
         index -= 1;
       if (index < 0)
         return 0;
@@ -164,11 +156,11 @@ public class Histogram implements Cloneable {
    *    Int.MaxValue if all values are infinity
    */
   public int getMinimum() {
-    if (_count == 0) {
+    if (count == 0) {
       return 0;
     } else {
       int index = 0;
-      while (index < BUCKET_OFFSETS.length && _buckets[index] == 0)
+      while (index < BUCKET_OFFSETS.length && buckets[index] == 0)
         index += 1;
       if (index >= BUCKET_OFFSETS.length)
         return Integer.MAX_VALUE;
@@ -188,60 +180,67 @@ public class Histogram implements Cloneable {
   }
 
   public void merge(Histogram other){
-    if (other._count > 0) {
-      for(int i=0; i < _numBuckets; i++){
-          _buckets[i] += other._buckets[i];
+    if (other.count > 0) {
+      for(int i=0; i < numBuckets; i++){
+          buckets[i] += other.buckets[i];
       }
 
-      _count += other.getCount();
-      _sum += other.getSum();
+      count += other.getCount();
+      sum += other.getSum();
     }
   }
 
   public Histogram minus(Histogram other) {
     Histogram rv = new Histogram();
-    rv._count = _count - other.getCount();
-    rv._sum = _sum - other.getSum();
-    for(int i=0; i < _numBuckets; i++){
-          rv._buckets[i] = _buckets[i] - other._buckets[i];
+    rv.count = count - other.getCount();
+    rv.sum = sum - other.getSum();
+    for(int i=0; i < numBuckets; i++){
+          rv.buckets[i] = buckets[i] - other.buckets[i];
       }
     return rv;
   }
 
-  /**
-   * Get an immutable snapshot of this histogram.
-   */
-  //def apply(): Distribution = new Distribution(clone())
 
-  @Override
-  public boolean equals(Object other) {
-    if(! (other instanceof Histogram) ){
-        return false;
-    }
-    Histogram h = (Histogram) other;
+@Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + Arrays.hashCode(buckets);
+	result = prime * result + (int) (count ^ (count >>> 32));
+	result = prime * result + (int) (sum ^ (sum >>> 32));
+	return result;
+}
 
-    boolean flag = true;
-    for( int i = 0; i < _numBuckets; i++){
-        if( h._buckets[i] != _buckets[i]){
-            flag = false;
-            break;
-        }
-    }
-    return ((h.getCount() == _count) && (h.getSum() == _sum) && flag);
-  }
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (obj == null)
+		return false;
+	if (getClass() != obj.getClass())
+		return false;
+	Histogram other = (Histogram) obj;
+	if (!Arrays.equals(buckets, other.buckets))
+		return false;
+	if (count != other.count)
+		return false;
+	if (sum != other.sum)
+		return false;
+	return true;
+}
 
   @Override
   public String toString(){
     StringBuilder str = new StringBuilder();
     str.append("<Histogram count=");
-    str.append(_count);
+    str.append(count);
     str.append(" sum=");
-    str.append(_sum);
-    for( int i=0; i < _buckets.length; i++){
+    str.append(sum);
+    for( int i=0; i < buckets.length; i++){
         str.append(" ");
         str.append(BUCKET_OFFSETS[i]);
         str.append("=");
-        str.append(_buckets[i]);
+        str.append(buckets[i]);
     }
     str.append(" />");
     return str.toString();

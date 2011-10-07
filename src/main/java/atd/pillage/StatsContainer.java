@@ -1,16 +1,16 @@
 /*
  *
- *  * Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  * not use this file except in compliance with the License. You may obtain
- *  * a copy of the License at
- *  *
- *  *     http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+ *  not use this file except in compliance with the License. You may obtain
+ *  a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  *
  */
 
@@ -24,14 +24,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author ATD
  */
 public class StatsContainer implements StatsProvider {
-  private MetricFactory _metricFactory;
+  private MetricFactory metricFactory;
+  public long start = System.currentTimeMillis();
 
   protected ConcurrentHashMap<String,Counter> counterMap = new ConcurrentHashMap<String, Counter>();
   protected ConcurrentHashMap<String,Metric> metricMap   = new ConcurrentHashMap<String, Metric>();
   protected ConcurrentHashMap<String,String> labelMap    = new ConcurrentHashMap<String, String>();
-
-  private List<StatsListener> _listeners = new ArrayList<StatsListener>();
-
+  
+  public StatsContainer( MetricFactory mFactory ){
+	  metricFactory = mFactory;
+  }
 
     @Override
     public void addMetric(String name, int value) {
@@ -77,7 +79,7 @@ public class StatsContainer implements StatsProvider {
     public Metric getMetric(String name) {
          Metric metric = metricMap.get(name);
         if( metric == null){
-            metricMap.putIfAbsent(name, _metricFactory.newMetric(name));
+            metricMap.putIfAbsent(name, metricFactory.newMetric());
             metric = metricMap.get(name);
         }
         return metric;
@@ -121,11 +123,12 @@ public class StatsContainer implements StatsProvider {
         counterMap.clear();
         labelMap.clear();
         metricMap.clear();
+        start = System.currentTimeMillis();
+    }
+    
+    @Override
+    public StatsSummary getSummary(){
+    	return new StatsSummary(getCounters(), getMetrics(), getLabels(), start, System.currentTimeMillis());
     }
 
-    public void addListener(StatsListener listener){
-        synchronized(this){
-            _listeners.add(listener);
-        }
-    }
 }

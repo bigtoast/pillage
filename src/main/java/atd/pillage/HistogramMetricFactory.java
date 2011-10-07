@@ -16,27 +16,11 @@
 
 package atd.pillage;
 
-/**
- * StatUtilities
- */
-public class StatUtils {
-	private static StatUtils ourInstance = new StatUtils();
+public class HistogramMetricFactory implements MetricFactory {
 
-	public static StatUtils getInstance() {
-		return ourInstance;
-	}
-
-	private StatUtils() {
-	}
-
-	// helper function for computing deltas over counters
-	public static long delta(long oldValue, long newValue) {
-		if (oldValue <= newValue) {
-			return newValue - oldValue;
-		} else {
-			return (Long.MAX_VALUE - oldValue) + (newValue - Long.MIN_VALUE)
-					+ 1;
-		}
+	@Override
+	public Metric newMetric() {
+		return new HistogramMetric();
 	}
 
 }

@@ -89,15 +89,18 @@ public interface StatsProvider {
   public Map<String,String> getLabels();
 
   /**
-   * Summarize all the counters, metrics, gauges, and labels in this collection.
-   */
-  //def get(): StatsSummary = StatsSummary(getCounters(), getMetrics(), getGauges(), getLabels())
-
-  /**
    * Reset all collected stats and erase the history.
    * Probably only useful for unit tests.
    */
    public void clearAll();
+   
+   /**
+    * Return a summary of the stats since the provider was started or the last time
+    * clear() was called, whichever was called more recently.
+    * 
+    * @return StatsSummary
+    */
+   public StatsSummary getSummary();
 
   /**
    * Runs the function f and logs that duration, in milliseconds, with the given name.

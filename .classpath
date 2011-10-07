@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/test/groovy"/>
 	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
-	<classpathentry kind="lib" path="/home/andy/.gradle/cache/antlr/antlr/jars/antlr-2.7.7.jar" exported="true"/>
-	<classpathentry kind="lib" path="/home/andy/.gradle/cache/asm/asm-util/jars/asm-util-3.2.jar" exported="true"/>
-	<classpathentry kind="lib" path="/home/andy/.gradle/cache/asm/asm-analysis/jars/asm-analysis-3.2.jar" exported="true"/>
-	<classpathentry sourcepath="/home/andy/.gradle/cache/com.google.code.gson/gson/sources/gson-1.7.1-sources.jar" kind="lib" path="/home/andy/.gradle/cache/com.google.code.gson/gson/jars/gson-1.7.1.jar" exported="true"/>
-	<classpathentry sourcepath="/home/andy/.gradle/cache/junit/junit-dep/sources/junit-dep-4.8.2-sources.jar" kind="lib" path="/home/andy/.gradle/cache/junit/junit-dep/jars/junit-dep-4.8.2.jar" exported="true"/>
-	<classpathentry sourcepath="/home/andy/.gradle/cache/org.codehaus.groovy/groovy-all/sources/groovy-all-1.7.5-sources.jar" kind="lib" path="/home/andy/.gradle/cache/org.codehaus.groovy/groovy-all/jars/groovy-all-1.7.5.jar" exported="true"/>
-	<classpathentry kind="lib" path="/home/andy/.gradle/cache/asm/asm-tree/jars/asm-tree-3.2.jar" exported="true"/>
-	<classpathentry sourcepath="/home/andy/.gradle/cache/org.codehaus.groovy/groovy/sources/groovy-1.7.10-sources.jar" kind="lib" path="/home/andy/.gradle/cache/org.codehaus.groovy/groovy/jars/groovy-1.7.10.jar" exported="true"/>
-	<classpathentry sourcepath="/home/andy/.gradle/cache/org.hamcrest/hamcrest-core/sources/hamcrest-core-1.2-sources.jar" kind="lib" path="/home/andy/.gradle/cache/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar" exported="true"/>
-	<classpathentry kind="lib" path="/home/andy/.gradle/cache/asm/asm-commons/jars/asm-commons-3.2.jar" exported="true"/>
-	<classpathentry kind="lib" path="/home/andy/.gradle/cache/asm/asm/jars/asm-3.2.jar" exported="true"/>
-	<classpathentry sourcepath="/home/andy/.gradle/cache/org.spockframework/spock-core/sources/spock-core-0.5-groovy-1.7-sources.jar" kind="lib" path="/home/andy/.gradle/cache/org.spockframework/spock-core/jars/spock-core-0.5-groovy-1.7.jar" exported="true"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/antlr/antlr/jars/antlr-2.7.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/asm/asm-util/jars/asm-util-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/asm/asm-analysis/jars/asm-analysis-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/com.google.code.gson/gson/jars/gson-1.7.1.jar" sourcepath="/home/andy/.gradle/cache/com.google.code.gson/gson/sources/gson-1.7.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/junit/junit-dep/jars/junit-dep-4.8.2.jar" sourcepath="/home/andy/.gradle/cache/junit/junit-dep/sources/junit-dep-4.8.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/org.codehaus.groovy/groovy-all/jars/groovy-all-1.7.5.jar" sourcepath="/home/andy/.gradle/cache/org.codehaus.groovy/groovy-all/sources/groovy-all-1.7.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/asm/asm-tree/jars/asm-tree-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/org.codehaus.groovy/groovy/jars/groovy-1.7.10.jar" sourcepath="/home/andy/.gradle/cache/org.codehaus.groovy/groovy/sources/groovy-1.7.10-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar" sourcepath="/home/andy/.gradle/cache/org.hamcrest/hamcrest-core/sources/hamcrest-core-1.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/asm/asm-commons/jars/asm-commons-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/asm/asm/jars/asm-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/andy/.gradle/cache/org.spockframework/spock-core/jars/spock-core-0.5-groovy-1.7.jar" sourcepath="/home/andy/.gradle/cache/org.spockframework/spock-core/sources/spock-core-0.5-groovy-1.7-sources.jar"/>
+	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

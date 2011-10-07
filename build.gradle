@@ -16,16 +16,37 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
+apply plugin: 'artifactory'
 
 sourceCompatibility = 1.6
 version = '0.1.0'
+
+group = "atd"
+
+artifactory {
+	contextUrl = 'http://build.ticketfly.com/artifactory'
+	publish {
+		repository {
+			repoKey = 'libs-release-local'
+			username = USERNAME
+			password = PASSWORD	
+			ivy {
+				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
+				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
+				mavenCompatible = false
+			  }
+			}
+		defaults {
+		  publishPom = false
+		}
+	}
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.1'
     groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.10'
     testCompile group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.7'
 }
