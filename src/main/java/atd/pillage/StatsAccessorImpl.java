@@ -18,8 +18,8 @@ package atd.pillage;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 
 /**
@@ -28,8 +28,8 @@ import java.util.regex.Pattern;
  * only tracked since the last report.
  */
 class StatsAccessorImpl implements StatsAccessor {
-    private StatsContainer container;
-    private List<StatsReporter> reporters;
+    private StatsProvider provider;
+    private List<StatsReporter> reporters = new ArrayList<StatsReporter>();
     private long lastSnap;
     private long currentSnap;
 
@@ -38,16 +38,31 @@ class StatsAccessorImpl implements StatsAccessor {
     private Map<String, Distribution> lastMetricMap = new HashMap<String, Distribution>();
     private Map<String, Distribution> deltaMetricMap = new HashMap<String, Distribution>();
     
+    public StatsAccessorImpl(StatsProvider provider){
+    	this(provider, true);
+    }
+    
+    public StatsAccessorImpl(StatsProvider provider, boolean startClean) {
+    	this.provider = provider;
+        if (startClean) {
+            for (Map.Entry<String, Long> entry : this.provider.getCounters().entrySet()) {
+                lastCounterMap.put(entry.getKey(), entry.getValue());
+            }
+            for (Map.Entry<String, Distribution> entry : this.provider.getMetrics().entrySet()) {
+                lastMetricMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
     
     @Override
 	public StatsSummary getFullSummary() {
-		return container.getSummary();
+		return provider.getSummary();
 	}
 
 
 	@Override
 	public StatsSummary getDeltaSummary() {
-		return new StatsSummary(deltaCounterMap, deltaMetricMap, container.getLabels(), lastSnap, currentSnap);
+		return new StatsSummary(deltaCounterMap, deltaMetricMap, provider.getLabels(), lastSnap, currentSnap);
 	}
 
 
@@ -81,24 +96,12 @@ class StatsAccessorImpl implements StatsAccessor {
 		}
 	}
 
-	public StatsAccessorImpl(StatsContainer container, boolean startClean) {
-        if (startClean) {
-            for (Map.Entry<String, Long> entry : container.getCounters().entrySet()) {
-                lastCounterMap.put(entry.getKey(), entry.getValue());
-            }
-            for (Map.Entry<String, Distribution> entry : container.getMetrics().entrySet()) {
-                lastMetricMap.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-    }
-
 
     protected void triggerCounterSnap() {
         Map<String, Long> deltas = new HashMap<String, Long>();
         synchronized (this) {
 
-            for (Map.Entry<String, Long> entry : container.getCounters().entrySet()) {
+            for (Map.Entry<String, Long> entry : provider.getCounters().entrySet()) {
                 long lastValue = 0;
                 if (lastCounterMap.containsKey(entry.getKey())) ;
                 lastValue = lastCounterMap.get(entry.getKey());
@@ -113,7 +116,7 @@ class StatsAccessorImpl implements StatsAccessor {
         Map<String, Distribution> deltas = new HashMap<String, Distribution>();
         synchronized (this) {
 
-            for (Map.Entry<String, Distribution> entry : container.getMetrics().entrySet()) {
+            for (Map.Entry<String, Distribution> entry : provider.getMetrics().entrySet()) {
 
                 if (lastMetricMap.containsKey(entry.getKey())) {
                     Distribution dist = lastMetricMap.get(entry.getKey());
