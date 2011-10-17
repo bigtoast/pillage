@@ -23,7 +23,7 @@ class TimerSpec extends Specification {
 
   def "A timer should not create a metric when not running"(){
       given:
-        StatsProvider provider = Mock(StatsProvider)
+        StatsContainer provider = Mock(StatsContainer)
         def timer = new Timer(provider, "test timer");
 
       when:
@@ -36,7 +36,7 @@ class TimerSpec extends Specification {
 
   def "A timer should create a metric when running and stop is called"(){
       given: "A new Timer started by default"
-        StatsProvider provider = Mock()
+        StatsContainer provider = Mock()
         Metric m = Mock()
         int elapsed = 0
 
@@ -56,7 +56,7 @@ class TimerSpec extends Specification {
 
   def "A timer should stop and start"(){
       given: "A new Timer started by default"
-        StatsProvider provider = Mock()
+        StatsContainer provider = Mock()
         Metric m = Mock()
         Integer elapsed = 0
 

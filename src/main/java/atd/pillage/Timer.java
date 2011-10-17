@@ -19,62 +19,67 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * A timer times stuff.
+ * A timer times stuff and uses a metric to track the durations in milliseconds. A metric will be
+ * created for each milestone in the following format
+ * 
+ * {timer name}-{milestone_name}.millis
+ * 
+ * Any spaces in the timer name or milestone name will be replaced with underscores.
  */
 public class Timer implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -8365175010198525518L;
 
 	public static class TimerMetric {
-		private String _name;
-		private long _value;
+		private String name;
+		private long value;
 
 		public TimerMetric(String name, long value) {
-			_name = name;
-			_value = value;
+			this.name = name;
+			this.value = value;
 		}
 
 		public String getName() {
-			return _name;
+			return name;
 		}
 
 		public long getValue() {
-			return _value;
+			return value;
 		}
 
 		public String toString() {
 			StringBuilder str = new StringBuilder();
-			str.append(_name);
+			str.append(name);
 			str.append("[");
-			str.append(_value);
+			str.append(value);
 			str.append("]");
 			return str.toString();
 		}
 	}
 
-	private long _startTime = 0;
-	private long _elapsedTime = 0;
+	private long startTime = 0;
+	private long elapsedTime = 0;
 
-	private String _name;
-	private String _safeName;
-	private StatsProvider _provider;
-	private AtomicBoolean _running = new AtomicBoolean(false);
-	private ConcurrentLinkedQueue<TimerMetric> _queue = new ConcurrentLinkedQueue<TimerMetric>();
+	private String name;
+	private String safeName;
+	private StatsContainer container;
+	private AtomicBoolean running = new AtomicBoolean(false);
+	private ConcurrentLinkedQueue<TimerMetric> queue = new ConcurrentLinkedQueue<TimerMetric>();
 
-	public Timer(StatsProvider provider, String name) {
-		this(provider, name, false);
+	public Timer(StatsContainer container, String name) {
+		this(container, name, false);
 	}
 
-	public Timer(StatsProvider provider, String name, boolean start) {
-		_name = name;
-		_safeName = name.replace(" ", "_");
-		_provider = provider;
+	public Timer(StatsContainer container, String name, boolean start) {
+		this.name = name;
+		this.safeName = name.replace(" ", "_");
+		this.container = container;
 		if (start)
 			start();
 	}
 
 	public boolean isRunning() {
-		return _running.get();
+		return running.get();
 	}
 
 	/**
@@ -84,7 +89,7 @@ public class Timer implements Serializable, Cloneable {
 	 * @return The start time in milliseconds since the epoch.
 	 */
 	public long getStartTime() {
-		return _startTime;
+		return startTime;
 	}
 
 	/**
@@ -95,8 +100,8 @@ public class Timer implements Serializable, Cloneable {
 	 * @return The elapsed time in milliseconds.
 	 */
 	public long getElapsedTime() {
-		return (_elapsedTime == -1L) ? System.currentTimeMillis() - _startTime
-				: _elapsedTime;
+		return (elapsedTime == -1L) ? System.currentTimeMillis() - startTime
+				: elapsedTime;
 	}
 
 	/**
@@ -106,7 +111,7 @@ public class Timer implements Serializable, Cloneable {
 	 * @return The grouping tag.
 	 */
 	public String getName() {
-		return _name;
+		return name;
 	}
 
 	/**
@@ -117,10 +122,8 @@ public class Timer implements Serializable, Cloneable {
 	 * 
 	 */
 	public String getSafeName() {
-		return _safeName;
+		return safeName;
 	}
-
-	// --- Start/Stop methods ---
 
 	/**
 	 * Starts this Timer, which sets its startTime property to the current time
@@ -132,9 +135,9 @@ public class Timer implements Serializable, Cloneable {
 	 * reset the start time to NOW and clear the elapsed time.
 	 */
 	public void start() {
-		_startTime = System.currentTimeMillis();
-		_elapsedTime = -1L;
-		_running.set(true);
+		startTime = System.currentTimeMillis();
+		elapsedTime = -1L;
+		running.set(true);
 	}
 
 	/**
@@ -145,19 +148,19 @@ public class Timer implements Serializable, Cloneable {
 	 * @return this.toString(), which is a message suitable for logging
 	 */
 	public long stop(String milestone) {
-		if (_running.getAndSet(false) == true) {
-			_elapsedTime = System.currentTimeMillis() - _startTime;
+		if (running.getAndSet(false) == true) {
+			elapsedTime = System.currentTimeMillis() - startTime;
 			String mName = metricName(milestone);
-			Metric m = _provider.getMetric(mName);
-			m.add((int) _elapsedTime);
-			_queue.add(new TimerMetric(metricName(milestone), _elapsedTime));
+			Metric m = container.getMetric(mName);
+			m.add((int) elapsedTime);
+			queue.add(new TimerMetric(metricName(milestone), elapsedTime));
 		}
-		return _elapsedTime;
+		return elapsedTime;
 	}
 
 	protected String metricName(String milestone) {
 		StringBuilder str = new StringBuilder();
-		str.append(_safeName);
+		str.append(safeName);
 		str.append("-");
 		str.append(milestone.replace(" ", "_"));
 		str.append(".millis");
@@ -181,7 +184,7 @@ public class Timer implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		for (TimerMetric metric : _queue) {
+		for (TimerMetric metric : queue) {
 			str.append(metric.toString());
 			str.append(" : ");
 		}
@@ -206,18 +209,18 @@ public class Timer implements Serializable, Cloneable {
 
 		Timer timer = (Timer) o;
 
-		if (_elapsedTime != timer.getElapsedTime()) {
+		if (elapsedTime != timer.getElapsedTime()) {
 			return false;
 		}
-		if (_startTime != timer.getStartTime()) {
-			return false;
-		}
-
-		if (_running.get() != timer.isRunning()) {
+		if (startTime != timer.getStartTime()) {
 			return false;
 		}
 
-		if (_name != null ? !_name.equals(timer.getName())
+		if (running.get() != timer.isRunning()) {
+			return false;
+		}
+
+		if (name != null ? !name.equals(timer.getName())
 				: timer.getName() != null) {
 			return false;
 		}
@@ -227,11 +230,11 @@ public class Timer implements Serializable, Cloneable {
 
 	public int hashCode() {
 		int result;
-		result = (int) (_startTime ^ (_startTime >>> 32));
-		result = 31 * result + (int) (_elapsedTime ^ (_elapsedTime >>> 32));
-		result = 31 * result + (_name != null ? _name.hashCode() : 0);
-		result = 31 * result + (_provider != null ? _provider.hashCode() : 0);
-		result = 31 * result + (_running != null ? _running.hashCode() : 0);
+		result = (int) (startTime ^ (startTime >>> 32));
+		result = 31 * result + (int) (elapsedTime ^ (elapsedTime >>> 32));
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (container != null ? container.hashCode() : 0);
+		result = 31 * result + (running != null ? running.hashCode() : 0);
 		return result;
 	}
 }

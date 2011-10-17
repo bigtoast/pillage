@@ -17,14 +17,46 @@ package atd.pillage;
 import java.util.Map;
 
 /**
- * A distribution is a summarized set of stats.
+ * Metrics are represented at a statistical distribution.
  */
 public interface Distribution {
+	
+	/**
+	 * get the number of metrics collected
+	 * @return
+	 */
     public long getCount();
+    
+    /**
+     * get the sum of all the metric values
+     * @return
+     */
     public long getSum();
+    
+    /**
+     * get the minimum value metric collected
+     * @return
+     */
     public long getMinimum();
+    
+    /**
+     * get the maximum value metric collected
+     * @return
+     */
     public long getMaximum();
+    
+    /**
+     * get the mean value for the metrics collected
+     * @return
+     */
     public double getMean();
+    
+    /**
+     * return the distribution as a map of statistics comprising 
+     * this metric.
+     * 
+     * @return
+     */
     public Map<String,Number> toMap();
 
     /**

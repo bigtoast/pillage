@@ -25,6 +25,14 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * An implementation of StatsReporter that fires a StatsSummary to 
+ * Ganglia over UDP.
+ * 
+ * This code was largly taken from <a href="http://code.google.com/p/embeddedgmetric/" target="_blank">EmbeddedGMetric</a>
+ * 
+ * @author andy
+ */
 public class GangliaStatsReporter implements StatsReporter {
 	public final static int SLOPE_ZERO = 0;
 	public final static int SLOPE_POSITIVE = 1;

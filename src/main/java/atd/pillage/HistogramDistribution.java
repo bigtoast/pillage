@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A distribution based on histograms
+ * A distribution based on a histogram
  */
 public class HistogramDistribution implements Distribution, Serializable {
 
@@ -50,16 +50,27 @@ public class HistogramDistribution implements Distribution, Serializable {
       return histogram.getSum();
     }
 
+    /**
+     * {@inheritDoc}
+     * This is +/-5%
+     */
     @Override
     public long getMinimum() {
       return histogram.getMinimum();
     }
 
+    /**
+     * {@inheritDoc}
+     * This is +/-5%
+     */
     @Override
     public long getMaximum() {
       return histogram.getMaximum();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getMean() {
       if ( histogram.getCount() > 0 )
@@ -68,6 +79,9 @@ public class HistogramDistribution implements Distribution, Serializable {
         return 0.0d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Distribution delta(Distribution dist) throws IllegalArgumentException {
       if ( ! ( dist instanceof HistogramDistribution) ){
@@ -76,6 +90,26 @@ public class HistogramDistribution implements Distribution, Serializable {
       return new HistogramDistribution( histogram.minus( ((HistogramDistribution) dist).getHistogram() ));
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * this will return
+     * count
+     * sum
+     * minimum
+     * maximum
+     * mean
+     * p25
+     * p50
+     * p75
+     * p90
+     * p95
+     * p99
+     * p999
+     * p9999
+     * 
+     * where p{num} represents percentile. i.e. p99 means the 99th percentile
+     */
     @Override
     public Map<String,Number> toMap(){
         HashMap<String, Number> map = new HashMap<String,Number>();

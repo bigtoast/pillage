@@ -14,9 +14,29 @@
 
 package atd.pillage
 
-import spock.lang.Specification;
+import spock.lang.*
 
-class PeriodicStatsCollectorSpec extends Specification {
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit
 
+class PeriodicCollectionSchedulerSpec extends Specification {
+	
+	def scheduler = PeriodicCollectionScheduler.getInstance();
+
+	def "A periodic stats scheduler should trigger 2 snaps"(){
+		given: 
+			StatsCollector collector = Mock()
+			CountDownLatch latch = new CountDownLatch(2);
+			collector.collect() >> { latch.countDown() }
+			
+			
+		when:
+			scheduler.scheduleCollection(collector, 1, TimeUnit.SECONDS);
+			
+		then:
+			latch.await()
+			true
+				
+	}
 	
 }

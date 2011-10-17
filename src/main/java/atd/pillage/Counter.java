@@ -17,7 +17,7 @@ package atd.pillage;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * This is a simple class to count stuff
+ * This is a simple class to count stuff. It wraps an AtomicLong
  *
  * @author ATD
  */

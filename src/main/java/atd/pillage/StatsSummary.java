@@ -22,12 +22,17 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * small object to encapsulate a summary of stats.
+ * A small object to encapsulate a summary of stats. A summary is an immutable 
+ * object.
  */
 public class StatsSummary {
 	private long start;
 	private long end;
 	
+	/**
+	 * Timespan in milliseconds included in this summary
+	 * @return
+	 */
 	public long span(){ return end - start; }
 	
     private Map<String, Long> counters;
@@ -46,18 +51,39 @@ public class StatsSummary {
     	this.end = end;
     }
 
+    /**
+     * return an unmodifiable map of counter names and their values
+     * @return
+     */
     public Map<String, Long> getCounters(){
         return Collections.unmodifiableMap(counters);
     }
 
+    /**
+     * return an unmodifiable map of metric names and their distributions
+     * 
+     * @return
+     */
     public Map<String, Distribution> getMetrics(){
         return Collections.unmodifiableMap(metrics);
     }
 
+    /**
+     * return an unmodifiable map of label names and their string values.
+     * 
+     * @return
+     */
     public Map<String, String> getLabels(){
         return Collections.unmodifiableMap(labels);
     }
 
+    /**
+     * Create a new StatsSummary object by filtering out unwanted stats based on the Pattern
+     * passed in.
+     * 
+     * @param pattern
+     * @return
+     */
     public StatsSummary filterOut(Pattern pattern){
         Map<String, Long> counters = new HashMap<String, Long>();
         Map<String, Distribution> metrics = new HashMap<String, Distribution>();
