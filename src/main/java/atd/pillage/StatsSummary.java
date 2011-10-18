@@ -38,15 +38,25 @@ public class StatsSummary {
     private Map<String, Long> counters;
     private Map<String, Distribution> metrics;
     private Map<String, String> labels;
+    private Map<String, Double> gauges;
 
     public StatsSummary(Map<String, Long> counters, Map<String, Distribution> metrics, Map<String, String> labels){
-        this(counters, metrics, labels,System.currentTimeMillis(), System.currentTimeMillis() );
+    	this(counters, metrics, labels, new HashMap<String, Double>());
+    }
+    
+    public StatsSummary(Map<String, Long> counters, Map<String, Distribution> metrics, Map<String, String> labels, Map<String,Double> gauges){
+        this(counters, metrics, labels, gauges, System.currentTimeMillis(), System.currentTimeMillis() );
     }
     
     public StatsSummary(Map<String, Long> counters, Map<String, Distribution> metrics, Map<String, String> labels, long start, long end){
+    	this(counters, metrics, labels, new HashMap<String, Double>(), start, end);
+    }
+        
+    public StatsSummary(Map<String, Long> counters, Map<String, Distribution> metrics, Map<String, String> labels, Map<String,Double> gauges, long start, long end){
     	this.counters = counters;
     	this.metrics = metrics;
     	this.labels = labels;
+    	this.gauges = gauges;
     	this.start = start;
     	this.end = end;
     }
@@ -75,6 +85,34 @@ public class StatsSummary {
      */
     public Map<String, String> getLabels(){
         return Collections.unmodifiableMap(labels);
+    }
+    
+    /**
+     * return an unmodifiable map of gauges.
+     * 
+     * @return
+     */
+    public Map<String, Double> getGauges(){
+    	if(gauges == null || gauges.isEmpty())
+    		return Collections.emptyMap();
+    				
+    	return Collections.unmodifiableMap(gauges);
+    }
+    
+    /**
+     * get the start time in milliseconds for this summary.
+     * @return
+     */
+    public long getStart(){
+    	return start;
+    }
+    
+    /**
+     * get the end time in milliseconds for this summary.
+     * @return
+     */
+    public long getEnd(){
+    	return end;
     }
 
     /**

@@ -29,6 +29,20 @@ package atd.pillage;
 public interface StatsCollector {
 	
 	/**
+	 * Indicate if this collector should collect jvm stats like heap, threads etc.
+	 * By default this is off so it has to be turned on.
+	 * 
+	 * @param flag
+	 */
+	public void includeJvmStats(boolean flag);
+	
+	/**
+	 * Indicate if jvm stats included in collections and summaries.
+	 * @return
+	 */
+	public boolean areJvmStatsIncluded();
+	
+	/**
 	 * Return a full summary of stats since the start of collecting stats or
 	 * since the last stats clear
 	 * 
