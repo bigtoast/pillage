@@ -9,9 +9,10 @@ The library was put together by pillaging a number of other open source libs ( h
 their good parts and ideas then mixing them together with some new code and ideas.
 
 Libraries pillaged thus far:
-+ [Ostrich](https://github.com/twitter/ostrich)
-+ [Perf4j](http://perf4j.codehaus.org/)
-+ [embeddedgmetric](http://code.google.com/p/embeddedgmetric/)
+
+- [Ostrich](https://github.com/twitter/ostrich)
+- [Perf4j](http://perf4j.codehaus.org/)
+- [embeddedgmetric](http://code.google.com/p/embeddedgmetric/)
 
 Components
 ----------
