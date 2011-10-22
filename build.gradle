@@ -11,50 +11,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'groovy'
-apply plugin: 'eclipse'
-apply plugin: 'artifactory'
-
-sourceCompatibility = 1.6
-version = '0.3.3'
-
-group = "atd"
-
-artifactory {
-	contextUrl = 'http://build.ticketfly.com/artifactory'
-	publish {
-		repository {
-			repoKey = 'libs-release-local'
-			username = USERNAME
-			password = PASSWORD	
-			ivy {
-				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
-				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
-				mavenCompatible = false
-			  }
+allprojects {
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	
+	sourceCompatibility = JavaVersion.VERSION_1_6
+	version = '0.3.3'
+	
+	group = "atd"
+}
+ 
+ 
+subprojects {
+ 
+	apply plugin: 'java'
+	apply plugin: 'groovy'
+	
+	apply plugin: 'artifactory'
+	
+	artifactory {
+		contextUrl = 'http://build.ticketfly.com/artifactory'
+		publish {
+			repository {
+				repoKey = 'libs-release-local'
+				username = USERNAME
+				password = PASSWORD	
+				ivy {
+					ivyLayout = '[organization]/[module]/ivy-[revision].xml'
+					artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
+					mavenCompatible = false
+				  }
+				}
+			defaults {
+			  publishPom = false
 			}
-		defaults {
-		  publishPom = false
 		}
 	}
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.8.2'
-    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.8' ){
-		exclude(group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.8.0-beta-3-SNAPSHOT')
+	
+	repositories {
+	    mavenCentral()
 	}
-}
+	
+	dependencies {
+	    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.8.2'
+	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.8' ){
+			exclude(group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.8.0-beta-3-SNAPSHOT')
+		}
+	}
+	
+	ideaModule {
+	    whenConfigured { module ->
+	        module.dependencies*.exported = true
+	    }
+	}
 
-ideaModule {
-    whenConfigured { module ->
-        module.dependencies*.exported = true
-    }
 }
