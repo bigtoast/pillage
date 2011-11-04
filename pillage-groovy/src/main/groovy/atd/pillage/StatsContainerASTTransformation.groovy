@@ -8,7 +8,7 @@ import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.transform.ASTTransformation;
 import org.codehaus.groovy.transform.GroovyASTTransformation
-
+/*
 @GroovyASTTransformation(phase=CompilePhase.CONVERSION)
 class StatsContainerASTTransformation implements ASTTransformation {
 
@@ -16,7 +16,7 @@ class StatsContainerASTTransformation implements ASTTransformation {
 	public void visit(ASTNode[] nodes, SourceUnit source) {
 		List classes = SourceUnit.ast?.classes
 		classes.each { ClassNode clazz ->
-			if( clazz.equals( StatsContainer.getClass() )){
+			if( clazz.equals( StatsContainer.class )){
 				clazz.addMethod(makeTimeMethod())	
 			}
 		}
@@ -102,3 +102,4 @@ class StatsContainerASTTransformation implements ASTTransformation {
 	}
 
 }
+*/

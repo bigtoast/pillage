@@ -23,13 +23,13 @@ public interface StatsContainer {
     /**
    * Adds a value to a named metric, which tracks min, max, mean, and a histogram.
    */
-  public void addMetric(String name, int value);
+  public void add(String name, int value);
 
   /**
    * Adds a set of values to a named metric. Effectively the incoming distribution is merged with
    * the named metric.
    */
-  public void addMetric(String name, Distribution distribution);
+  public void add(String name, Distribution distribution);
 
   /**
    * Increments a counter, returning the new value.
@@ -44,13 +44,28 @@ public interface StatsContainer {
   /**
    * Set a label to a string.
    */
-  public void setLabel(String name,String value);
+  public void set(String name, String value);
 
   /**
    * Clear an existing label.
    */
   public void clearLabel(String name);
+  
+  /**
+   * Clear metric
+   * 
+   * @param name
+   */
+  public void clearMetric(String name);
 
+  /**
+   * Clear counter
+   * 
+   * It actually resets the counter but I am going for consistency in naming
+   * @param name
+   */
+  public void clearCounter(String name);
+  
   /**
    * Get the Counter object representing a named counter.
    */
@@ -65,29 +80,51 @@ public interface StatsContainer {
    * Get the current value of a named label, if it exists.
    */
   public String getLabel(String name);
-
+  
     /**
      * return new stopwatch.
      *
      * @param name String
-     * @return StopWatch
+     * @return a new timer object
      */
   public Timer getTimer(String name);
+  
   /**
-   * Summarize all the counters in this collection.
+   * evaluate all the counters in this collection.
    */
-  public Map<String,Long> getCounters();
+  public Map<String,Long> counters();
 
   /**
-   * Summarize all the metrics in this collection.
+   * evaluate all the metrics in this collection.
    */
-  public Map<String,Distribution> getMetrics();
+  public Map<String,Distribution> metrics();
 
   /**
-   * Summarize all the labels in this collection.
+   * evaluate all the labels in this collection.
    */
-  public Map<String,String> getLabels();
+  public Map<String,String> labels();
 
+  /**
+   * evalutate all the gauges in this container
+   */
+  public Map<String, Double> gauges();
+  
+  /**
+   * Register a gauge with the container. 
+   * 
+   * @param name
+   * @param gauge
+   */
+  public void registerGauge(String name, Gauge gauge);
+
+  /**
+   * Remove the gauge registered with name from this container.
+   * 
+   * @param name
+   */
+  public void deregisterGauge(String name);
+  
+  
   /**
    * Reset all collected stats and erase the history.
    * Probably only useful for unit tests.
@@ -102,66 +139,4 @@ public interface StatsContainer {
     */
    public StatsSummary getSummary();
 
-  /**
-   * Runs the function f and logs that duration, in milliseconds, with the given name.
-   */
-  /*def time[T](name: String)(f: => T): T = {
-    val (rv, duration) = Duration.inMilliseconds(f)
-    addMetric(name + "_msec", duration.inMilliseconds.toInt)
-    rv
-  } */
-
-  /**
-   * Runs the function f and logs that duration until the future is satisfied, in microseconds, with
-   * the given name.
-   */
-  /*def timeFutureMicros[T](name: String)(f: Future[T]): Future[T] = {
-    val start = Time.now
-    f.respond { _ =>
-      addMetric(name + "_usec", start.untilNow.inMicroseconds.toInt)
-    }
-    f
-  } */
-
-  /**
-   * Runs the function f and logs that duration until the future is satisfied, in milliseconds, with
-   * the given name.
-   */
-  /*def timeFutureMillis[T](name: String)(f: Future[T]): Future[T] = {
-    val start = Time.now
-    f.respond { _ =>
-      addMetric(name + "_msec", start.untilNow.inMilliseconds.toInt)
-    }
-    f
-  } */
-
-  /**
-   * Runs the function f and logs that duration until the future is satisfied, in nanoseconds, with
-   * the given name.
-   */
-  /*def timeFutureNanos[T](name: String)(f: Future[T]): Future[T] = {
-    val start = Time.now
-    f.respond { _ =>
-      addMetric(name + "_nsec", start.untilNow.inNanoseconds.toInt)
-    }
-    f
-  } */
-
-  /**
-   * Runs the function f and logs that duration, in microseconds, with the given name.
-   */
-  /*def timeMicros[T](name: String)(f: => T): T = {
-    val (rv, duration) = Duration.inNanoseconds(f)
-    addMetric(name + "_usec", duration.inMicroseconds.toInt)
-    rv
-  } */
-
-  /**
-   * Runs the function f and logs that duration, in nanoseconds, with the given name.
-   */
-  /*def timeNanos[T](name: String)(f: => T): T = {
-    val (rv, duration) = Duration.inNanoseconds(f)
-    addMetric(name + "_nsec", duration.inNanoseconds.toInt)
-    rv
-  } */
 }

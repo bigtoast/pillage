@@ -21,7 +21,6 @@ allprojects {
 	group = "atd"
 }
  
- 
 subprojects {
  
 	apply plugin: 'java'

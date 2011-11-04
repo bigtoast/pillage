@@ -46,6 +46,7 @@ class StatsCollectorImpl implements StatsCollector {
     private Map<String, Distribution> lastMetricMap = new HashMap<String, Distribution>();
     private Map<String, Distribution> deltaMetricMap = new HashMap<String, Distribution>();
     private Map<String, Double> lastGaugeMap = new HashMap<String, Double>();
+    private Map<String, Double> deltaGaugeMap = new HashMap<String, Double>();
     
     public StatsCollectorImpl(StatsContainer container){
     	this(container, true, false);
@@ -59,16 +60,16 @@ class StatsCollectorImpl implements StatsCollector {
     	this.container = container;
     	this.includeJvmStats = includeJvmStats;
         if (startClean) {
-            for (Map.Entry<String, Long> entry : this.container.getCounters().entrySet()) {
+            for (Map.Entry<String, Long> entry : this.container.counters().entrySet()) {
                 lastCounterMap.put(entry.getKey(), entry.getValue());
             }
-            for (Map.Entry<String, Distribution> entry : this.container.getMetrics().entrySet()) {
+            for (Map.Entry<String, Distribution> entry : this.container.metrics().entrySet()) {
                 lastMetricMap.put(entry.getKey(), entry.getValue());
             }
+            lastGaugeMap.putAll(this.container.gauges());
         }
     }
-   
-    
+       
     /**
      * {@inheritDoc}
      */
@@ -107,7 +108,7 @@ class StatsCollectorImpl implements StatsCollector {
      */
 	@Override
 	public StatsSummary getDeltaSummary() {
-		return new StatsSummary(deltaCounterMap, deltaMetricMap, container.getLabels(), lastGaugeMap, lastSnap, currentSnap);
+		return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), deltaGaugeMap, lastSnap, currentSnap);
 	}
 
 	/**
@@ -116,6 +117,7 @@ class StatsCollectorImpl implements StatsCollector {
 	@Override
 	public StatsSummary collect() {
 		triggerCounterSnap();
+		triggerGaugeSnap();
 		triggerMetricSnap();
 		lastSnap = currentSnap;
 		currentSnap = System.currentTimeMillis();
@@ -146,7 +148,6 @@ class StatsCollectorImpl implements StatsCollector {
 		}
 	}
 
-
 	/**
 	 * Trigger a collection of the counters and overwrite the last collection.
 	 */
@@ -154,10 +155,11 @@ class StatsCollectorImpl implements StatsCollector {
         Map<String, Long> deltas = new HashMap<String, Long>();
         synchronized (this) {
 
-            for (Map.Entry<String, Long> entry : container.getCounters().entrySet()) {
+            for (Map.Entry<String, Long> entry : container.counters().entrySet()) {
                 long lastValue = 0;
-                if (lastCounterMap.containsKey(entry.getKey())) ;
-                lastValue = lastCounterMap.get(entry.getKey());
+                if (lastCounterMap.containsKey(entry.getKey()))
+                	lastValue = lastCounterMap.get(entry.getKey());
+                
                 deltas.put(entry.getKey(), StatUtils.delta(lastValue, entry.getValue()));
                 lastCounterMap.put(entry.getKey(), entry.getValue());
             }
@@ -172,7 +174,7 @@ class StatsCollectorImpl implements StatsCollector {
         Map<String, Distribution> deltas = new HashMap<String, Distribution>();
         synchronized (this) {
 
-            for (Map.Entry<String, Distribution> entry : container.getMetrics().entrySet()) {
+            for (Map.Entry<String, Distribution> entry : container.metrics().entrySet()) {
 
                 if (lastMetricMap.containsKey(entry.getKey())) {
                     Distribution dist = lastMetricMap.get(entry.getKey());
@@ -184,10 +186,30 @@ class StatsCollectorImpl implements StatsCollector {
                 lastMetricMap.put(entry.getKey(), entry.getValue());
             }
         }
-        if(includeJvmStats){
-        	lastGaugeMap = getJvmStats();
-        }
+
         deltaMetricMap = deltas;
+    }
+   
+    /**
+     * Snap gauges into metrics
+     */
+    public void triggerGaugeSnap(){
+        Map<String, Double> deltas = new HashMap<String, Double>();
+        synchronized (this) {
+        	Map<String, Double> gauges = container.gauges();
+            if(includeJvmStats){
+            	gauges.putAll( getJvmStats() );
+            }
+            for (Map.Entry<String, Double> entry : gauges.entrySet()) {
+                double lastValue = 0;
+                if (lastGaugeMap.containsKey(entry.getKey()))
+                	lastValue = lastGaugeMap.get(entry.getKey());
+                
+                deltas.put(entry.getKey(), StatUtils.delta(lastValue, entry.getValue()));
+                lastGaugeMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        deltaGaugeMap = deltas;
     }
     
     public static final String HEAP_USED           = "jvm.heap.used.bytes";

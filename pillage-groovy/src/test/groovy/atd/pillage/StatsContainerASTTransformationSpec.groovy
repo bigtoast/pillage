@@ -3,7 +3,7 @@ package atd.pillage
 import spock.lang.*;
 
 class StatsContainerASTTransformationSpec extends Specification {
-
+/*
 	def "The time method should be added to the StatsContainer interface"(){
 		given:
 			def container = new StatsContainerImpl(new HistogramMetricFactory())
@@ -21,4 +21,5 @@ class StatsContainerASTTransformationSpec extends Specification {
 			metric.getSum() > 1000
 			metric.getSum() < 2000
 	}
+	*/
 }

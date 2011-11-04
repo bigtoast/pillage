@@ -21,114 +21,211 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class acts as a container for stats
+ * 
  * @author ATD
  */
 public class StatsContainerImpl implements StatsContainer {
-  private MetricFactory metricFactory;
-  public long start = System.currentTimeMillis();
+	private MetricFactory metricFactory;
+	public long start = System.currentTimeMillis();
 
-  protected ConcurrentHashMap<String,Counter> counterMap = new ConcurrentHashMap<String, Counter>();
-  protected ConcurrentHashMap<String,Metric> metricMap   = new ConcurrentHashMap<String, Metric>();
-  protected ConcurrentHashMap<String,String> labelMap    = new ConcurrentHashMap<String, String>();
-  
-  public StatsContainerImpl( MetricFactory mFactory ){
-	  metricFactory = mFactory;
-  }
+	protected ConcurrentHashMap<String, Counter> counterMap = new ConcurrentHashMap<String, Counter>();
+	protected ConcurrentHashMap<String, Metric> metricMap = new ConcurrentHashMap<String, Metric>();
+	protected ConcurrentHashMap<String, String> labelMap = new ConcurrentHashMap<String, String>();
+	protected ConcurrentHashMap<String, Gauge> gaugeMap = new ConcurrentHashMap<String, Gauge>();
 
-    @Override
-    public void addMetric(String name, int value) {
-        getMetric(name).add(value);
-    }
+	public StatsContainerImpl(MetricFactory mFactory) {
+		metricFactory = mFactory;
+	}
 
-    @Override
-    public void addMetric(String name, Distribution distribution) {
-        getMetric(name).add(distribution);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void add(String name, int value) {
+		getMetric(name).add(value);
+	}
 
-    @Override
-    public void incr(String name, int count) {
-        getCounter(name).incr(count);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void add(String name, Distribution distribution) {
+		getMetric(name).add(distribution);
+	}
 
-    @Override
-    public void incr(String name) {
-        getCounter(name).incr();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void incr(String name, int count) {
+		getCounter(name).incr(count);
+	}
 
-    @Override
-    public void setLabel(String name, String value) {
-        labelMap.put(name,value);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void incr(String name) {
+		getCounter(name).incr();
+	}
 
-    @Override
-    public void clearLabel(String name) {
-        labelMap.remove(name);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void set(String name, String value) {
+		labelMap.put(name, value);
+	}
 
-    @Override
-    public Counter getCounter(String name) {
-         Counter counter = counterMap.get(name);
-        if( counter == null){
-            counterMap.putIfAbsent(name, new Counter());
-            counter = counterMap.get(name);
-        }
-        return counter;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearMetric(String name) {
+		Metric metric = metricMap.get(name);
+		if(metric != null)
+			metric.clear();
+	}
 
-    @Override
-    public Metric getMetric(String name) {
-         Metric metric = metricMap.get(name);
-        if( metric == null){
-            metricMap.putIfAbsent(name, metricFactory.newMetric());
-            metric = metricMap.get(name);
-        }
-        return metric;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearCounter(String name) {
+		Counter cntr = counterMap.get(name);
+		if( cntr != null)
+			cntr.reset();		
+	}
 
-    @Override
-    public String getLabel(String name) {
-        return labelMap.get(name);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, Double> gauges() {
+		HashMap<String, Double> map = new HashMap<String, Double>();
+		for(Map.Entry<String, Gauge> entry :gaugeMap.entrySet()){
+			map.put(entry.getKey(), entry.getValue().read());
+		}
+		return map;
+	}
 
-    @Override
-    public Timer getTimer(String name) {
-        return new Timer(this, name);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerGauge(String name, Gauge gauge) {
+		gaugeMap.putIfAbsent(name, gauge);
+	}
 
-    @Override
-    public Map<String, Long> getCounters() {
-        HashMap<String,Long> map = new HashMap<String, Long>(counterMap.size());
-        for(Map.Entry<String, Counter> entry: counterMap.entrySet()){
-            map.put(entry.getKey(), entry.getValue().value());
-        }
-        return map;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deregisterGauge(String name) {
+		gaugeMap.remove(name);
+	}
 
-    @Override
-    public Map<String, Distribution> getMetrics() {
-        HashMap<String, Distribution> map = new HashMap<String, Distribution>(metricMap.size());
-        for(Map.Entry<String,Metric> entry: metricMap.entrySet()){
-            map.put(entry.getKey(),entry.getValue().getDistribution());
-        }
-        return map;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearLabel(String name) {
+		labelMap.remove(name);
+	}
 
-    @Override
-    public Map<String, String> getLabels() {
-        return Collections.unmodifiableMap(labelMap);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Counter getCounter(String name) {
+		Counter counter = counterMap.get(name);
+		if (counter == null) {
+			counterMap.putIfAbsent(name, new Counter());
+			counter = counterMap.get(name);
+		}
+		return counter;
+	}
 
-    @Override
-    public void clearAll() {
-        counterMap.clear();
-        labelMap.clear();
-        metricMap.clear();
-        start = System.currentTimeMillis();
-    }
-    
-    @Override
-    public StatsSummary getSummary(){
-    	return new StatsSummary(getCounters(), getMetrics(), getLabels(), start, System.currentTimeMillis());
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Metric getMetric(String name) {
+		Metric metric = metricMap.get(name);
+		if (metric == null) {
+			metricMap.putIfAbsent(name, metricFactory.newMetric());
+			metric = metricMap.get(name);
+		}
+		return metric;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getLabel(String name) {
+		return labelMap.get(name);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Timer getTimer(String name) {
+		return new Timer(this, name);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, Long> counters() {
+		HashMap<String, Long> map = new HashMap<String, Long>(counterMap.size());
+		for (Map.Entry<String, Counter> entry : counterMap.entrySet()) {
+			map.put(entry.getKey(), entry.getValue().value());
+		}
+		return map;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, Distribution> metrics() {
+		HashMap<String, Distribution> map = new HashMap<String, Distribution>(
+				metricMap.size());
+		for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
+			map.put(entry.getKey(), entry.getValue().getDistribution());
+		}
+		return map;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, String> labels() {
+		return Collections.unmodifiableMap(labelMap);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearAll() {
+		counterMap.clear();
+		labelMap.clear();
+		metricMap.clear();
+		start = System.currentTimeMillis();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public StatsSummary getSummary() {
+		return new StatsSummary(counters(), metrics(), labels(), start,
+				System.currentTimeMillis());
+	}
 
 }

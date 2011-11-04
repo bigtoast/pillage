@@ -171,6 +171,20 @@ public class Timer implements Serializable, Cloneable {
 		}
 		return elapsedTime;
 	}
+	
+	/**
+	 * This works just like stop but it doesn't stop the timer. 
+	 * @param lap
+	 * @return
+	 */
+	public long lap(String lap) {
+		if(running.get()){
+			elapsedTime = System.currentTimeMillis() - startTime;
+			Metric m = container.getMetric(metricName(lap));
+			m.add((int) elapsedTime);
+		}
+		return elapsedTime;
+	}
 
 	protected String metricName(String milestone) {
 		StringBuilder str = new StringBuilder();

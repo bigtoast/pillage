@@ -39,4 +39,14 @@ public class StatUtils {
 		}
 	}
 
+	// helper function for computing deltas over gauges
+	public static double delta(double oldValue, double newValue) {
+		if (oldValue <= newValue) {
+			return newValue - oldValue;
+		} else {
+			return (Double.MAX_VALUE - oldValue)
+					+ (newValue - Double.MIN_VALUE) + 1;
+		}
+	}
+
 }
