@@ -12,25 +12,26 @@
  * limitations under the License.
  */
 allprojects {
-        apply plugin: 'eclipse'
-        apply plugin: 'idea'
-
-        sourceCompatibility = JavaVersion.VERSION_1_6
-        version = '0.3.4'
-
-        group = "atd"
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	
+	sourceCompatibility = JavaVersion.VERSION_1_6
+	version = '0.3.3'
+	
+	group = "atd"
 }
  
 subprojects {
  
-		apply plugin: 'groovy'
-        apply plugin: 'java'
-
+	apply plugin: 'java'
+	apply plugin: 'groovy'
+	apply plugin: 'scala'
+	
 /*
-        apply plugin: 'artifactory'
-        
-        artifactory {
-	            contextUrl = 'http://build.ticketfly.com/artifactory'
+	apply plugin: 'artifactory'
+	
+	artifactory {
+		contextUrl = 'http://build.ticketfly.com/artifactory'
 		publish {
 			repository {
 				repoKey = 'libs-release-local'
@@ -57,6 +58,12 @@ subprojects {
 	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.8' ){
 			exclude(group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.8.0-beta-3-SNAPSHOT')
 		}
+	}
+	
+	ideaModule {
+	    whenMerged { module ->
+	        module.dependencies*.exported = true
+	    }
 	}
 
 	idea.module.iml {

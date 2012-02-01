@@ -1,7 +1,6 @@
 
 package atd.pillage
 
-ExpandoMetaClass.enableGlobally()
 
 /**
  * Adds a time method to a stats container. Use it thusly:

@@ -1,6 +1,8 @@
 
-dependsOn(':pillage')
+apply plugin: 'groovy'
+
+dependsOn(':pillage-core')
 
 dependencies {
-	compile project(":pillage")
+	compile project(":pillage-core")
 }

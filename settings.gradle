@@ -1,1 +1,1 @@
-include 'pillage', 'pillage-groovy'
+include 'pillage-core', 'pillage-groovy', 'pillage-scala'

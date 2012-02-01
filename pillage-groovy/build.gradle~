@@ -1,0 +1,6 @@
+
+dependsOn(':pillage')
+
+dependencies {
+	compile project(":pillage")
+}

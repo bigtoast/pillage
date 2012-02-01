@@ -1,6 +1,7 @@
-package atd.pillage
+package atd.pillage.groovy
 
 import spock.lang.*
+import atd.pillage.*
 
 class GroovyStatsContainerSpec extends Specification {
 
@@ -29,7 +30,7 @@ class GroovyStatsContainerSpec extends Specification {
 		when:
 			container.time("test_timer"){
 				Thread.sleep(1000);
-				stopAndStart("step1")
+				lap("step1")
 				Thread.sleep(1000);
 			}
 			
@@ -38,7 +39,7 @@ class GroovyStatsContainerSpec extends Specification {
 			sum.getMetrics().size() == 2
 			def metric = sum.getMetrics().get("test_timer.millis")
 			metric.getCount() == 1
-			metric.getSum() > 2000
+			metric.getSum() >= 2000
 			metric.getSum() < 3000
 			
 			def metric2 = sum.getMetrics().get("test_timer-step1.millis")

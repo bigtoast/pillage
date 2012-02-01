@@ -1,4 +1,7 @@
-package atd.pillage
+package atd.pillage.groovy
+
+import atd.pillage.StatsContainer
+import atd.pillage.Gauge
 
 class GroovyStatsContainer implements StatsContainer {
 	
@@ -9,7 +12,7 @@ class GroovyStatsContainer implements StatsContainer {
 	}
 	
 	def time(String timerName, Closure c ) {
-		def timer = container.getTimer(timerName);
+		def timer = container.getTimer(timerName)
 		c.delegate = timer
 		c.resolveStrategy = Closure.DELEGATE_FIRST
 		timer.start()
