@@ -23,8 +23,9 @@ class StatsCollectorImplSpec extends Specification {
 	def "getSummary should call container.getSummary"(){
 		given:
 			StatsContainer container = Mock()
-			container.getCounters() >> { [:] }
-			container.getMetrics() >> { [:] }
+			container.counters() >> { [:] }
+			container.metrics() >> { [:] }
+			container.gauges() >> { [:] }
 			def collector = new StatsCollectorImpl(container)
 		when:
 			collector.getFullSummary()
@@ -36,21 +37,23 @@ class StatsCollectorImplSpec extends Specification {
 	def "collect should triggerCounterSnap and triggerMetricSnap"(){
 		given:
 			StatsContainer container = Mock()
-			container.getCounters() >> { [:] }
-			container.getMetrics() >> { [:] }
+			container.counters() >> { [:] }
+			container.metrics() >> { [:] }
+			container.gauges() >> { [:] }
 			def collector = new StatsCollectorImpl(container)
 		when:
 			collector.collect()
 		then:
-			1 * container.getCounters() >> { [:] }
-			1 * container.getMetrics() >> { [:] }
+			1 * container.counters() >> { [:] }
+			1 * container.metrics() >> { [:] }
 	}
 	
 	def "getJvmStats should return jvm stats when includeJvmStats not activated but method should return false"(){
 		given:
 			StatsContainer container = Mock()
-			container.getCounters() >> { [:] }
-			container.getMetrics() >> { [:] }
+			container.counters() >> { [:] }
+			container.metrics() >> { [:] }
+			container.gauges() >> { [:] }
 			def collector = new StatsCollectorImpl(container)
 		expect:
 			collector.areJvmStatsIncluded() == false
@@ -60,8 +63,9 @@ class StatsCollectorImplSpec extends Specification {
 	def "collect should not include jvm stats by default"(){
 		given:
 			StatsContainer container = Mock()
-			container.getCounters() >> { [:] }
-			container.getMetrics() >> { [:] }
+			container.counters() >> { [:] }
+			container.metrics() >> { [:] }
+			container.gauges() >> { [:] }
 			container.getSummary() >> { new StatsSummary([:], [:], [:]) }
 			def collector = new StatsCollectorImpl(container)
 		when:
@@ -75,8 +79,9 @@ class StatsCollectorImplSpec extends Specification {
 	def "collect should include jvm stats when turned on"(){
 		given:
 			StatsContainer container = Mock()
-			container.getCounters() >> { [:] }
-			container.getMetrics() >> { [:] }
+			container.counters() >> { [:] }
+			container.metrics() >> { [:] }
+			container.gauges() >> { [:] }
 			container.getSummary() >> { new StatsSummary([:], [:], [:]) }
 			def collector = new StatsCollectorImpl(container)
 			collector.includeJvmStats(true);
@@ -91,8 +96,9 @@ class StatsCollectorImplSpec extends Specification {
 	def "getJvmStats should return jvm stats with no null keys"(){
 		given:
 			StatsContainer container = Mock()
-			container.getCounters() >> { [:] }
-			container.getMetrics() >> { [:] }
+			container.counters() >> { [:] }
+			container.metrics() >> { [:] }
+			container.gauges() >> { [:] }
 			container.getSummary() >> { new StatsSummary([:], [:], [:]) }
 			def collector = new StatsCollectorImpl(container)
 		when:

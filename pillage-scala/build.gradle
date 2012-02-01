@@ -1,0 +1,38 @@
+
+apply plugin: 'scala'
+
+dependsOn(':pillage-core')
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Libraries needed to run the scala tools
+    scalaTools 'org.scala-lang:scala-compiler:2.9.1'
+    scalaTools 'org.scala-lang:scala-library:2.9.1'
+
+    // Libraries needed for scala api
+    compile 'org.scala-lang:scala-library:2.9.1'
+	testCompile 'org.scalatest:scalatest_2.9.1:1.6.1'
+
+	compile project(":pillage-core")
+	//assemble project(":pillage-core")
+}
+
+task makeTestResultsDir( dependsOn :testClasses ) << { testResultsDir.mkdirs() }
+
+task test(overwrite: true, dependsOn: makeTestResultsDir) << {
+	
+	ant.taskdef(name: 'scalatest',
+		classname: 'org.scalatest.tools.ScalaTestAntTask',
+		classpath: sourceSets.test.runtimeClasspath.asPath
+	)
+	ant.scalatest( runpath : sourceSets.test.output.classesDir,
+		haltonfailure: 'true',
+		fork: 'false') {
+		reporter(type: 'stdout')
+		reporter(type: 'junitxml', directory: testResultsDir)
+		//reporter(type: 'graphic') // uncomment this line for a junit style gui
+	}
+}

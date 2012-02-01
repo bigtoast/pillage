@@ -145,7 +145,7 @@ public class Timer implements Serializable, Cloneable {
 	 * call this method (or one of the other stop methods) before passing this
 	 * instance to a logger.
 	 * 
-	 * @return this.toString(), which is a message suitable for logging
+	 * @return elapsed time
 	 */
 	public long stop(String milestone) {
 		if (running.getAndSet(false) == true) {
@@ -157,12 +157,42 @@ public class Timer implements Serializable, Cloneable {
 		}
 		return elapsedTime;
 	}
+	
+	/**
+	 * Stop the timer and create a metric with the timer name and elapsed time
+	 * in millis.
+	 * @return
+	 */
+	public long stop() {
+		if (running.getAndSet(false) == true) {
+			elapsedTime = System.currentTimeMillis() - startTime;
+			Metric m = container.getMetric(metricName(null));
+			m.add((int) elapsedTime);
+		}
+		return elapsedTime;
+	}
+	
+	/**
+	 * This works just like stop but it doesn't stop the timer. 
+	 * @param lap
+	 * @return
+	 */
+	public long lap(String lap) {
+		if(running.get()){
+			elapsedTime = System.currentTimeMillis() - startTime;
+			Metric m = container.getMetric(metricName(lap));
+			m.add((int) elapsedTime);
+		}
+		return elapsedTime;
+	}
 
 	protected String metricName(String milestone) {
 		StringBuilder str = new StringBuilder();
 		str.append(safeName);
-		str.append("-");
-		str.append(milestone.replace(" ", "_"));
+		if( milestone != null ){
+			str.append("-");
+			str.append(milestone.replace(" ", "_"));
+		}
 		str.append(".millis");
 		return str.toString();
 	}
