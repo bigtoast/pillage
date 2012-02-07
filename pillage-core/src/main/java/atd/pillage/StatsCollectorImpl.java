@@ -34,7 +34,7 @@ import java.util.Map;
  * Each report resets state, so counters are reported as deltas, and metrics distributions are
  * only tracked since the last report.
  */
-class StatsCollectorImpl implements StatsCollector {
+public class StatsCollectorImpl implements StatsCollector {
     private StatsContainer container;
     private List<StatsReporter> reporters = new ArrayList<StatsReporter>();
     private long lastSnap;

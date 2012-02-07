@@ -60,8 +60,7 @@ public class GangliaStatsReporter implements StatsReporter {
 	}
 	
 	public GangliaStatsReporter(String gangliaHost, int port) throws UnknownHostException {
-		this.hostName = InetAddress.getLocalHost().getHostName();
-		new GangliaStatsReporter(gangliaHost, port);
+		this(gangliaHost, port, InetAddress.getLocalHost().getHostName());
 	}
 	
 	public void send(String name, String value, String type, String units, int slope, int tmax, int dmax){

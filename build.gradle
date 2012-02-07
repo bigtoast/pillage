@@ -16,15 +16,17 @@ allprojects {
         apply plugin: 'idea'
 
         sourceCompatibility = JavaVersion.VERSION_1_6
-        version = '0.3.4'
+        version = '0.3.6'
 
         group = "atd"
+		
 }
  
 subprojects {
  
 		apply plugin: 'groovy'
         apply plugin: 'java'
+		apply plugin: 'maven'
 
 /*
         apply plugin: 'artifactory'
@@ -48,6 +50,15 @@ subprojects {
 		}
 	}
 */	
+
+	uploadArchives {
+		repositories {
+			mavenDeployer { 
+				repository( url: "file:///home/andy/Projects/Destroyer/bigtoast.github.com/repo/" )
+			}
+		}
+	}
+	
 	repositories {
 	    mavenCentral()
 	}
