@@ -16,7 +16,7 @@ allprojects {
         apply plugin: 'idea'
 
         sourceCompatibility = JavaVersion.VERSION_1_6
-        version = '0.3.6'
+        version = '0.3.7'
 
         group = "atd"
 		
@@ -26,35 +26,12 @@ subprojects {
  
 		apply plugin: 'groovy'
         apply plugin: 'java'
-		apply plugin: 'maven'
-
-/*
-        apply plugin: 'artifactory'
-        
-        artifactory {
-	            contextUrl = 'http://build.ticketfly.com/artifactory'
-		publish {
-			repository {
-				repoKey = 'libs-release-local'
-				username = USERNAME
-				password = PASSWORD	
-				ivy {
-					ivyLayout = '[organization]/[module]/ivy-[revision].xml'
-					artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
-					mavenCompatible = false
-				  }
-				}
-			defaults {
-			  publishPom = false
-			}
-		}
-	}
-*/	
+		apply plugin: 'maven'	
 
 	uploadArchives {
 		repositories {
 			mavenDeployer { 
-				repository( url: "file:///home/andy/Projects/Destroyer/bigtoast.github.com/repo/" )
+				repository( url: "file:///${user.home}/Projects/BigToast/bigtoast.github.com/repo/" )
 			}
 		}
 	}

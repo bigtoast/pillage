@@ -58,7 +58,7 @@ public class StatsCollectorMBean implements DynamicMBean {
 
     @Override
     public AttributeList getAttributes(String[] attributes) {
-    	StatsSummary stats = collector.getDeltaSummary();
+    	StatsSummary stats = collector.getFullSummary();
         AttributeList list = new AttributeList();
         for(String attribute :attributes){
         	if( stats.getCounters().containsKey(attribute)){
@@ -87,7 +87,7 @@ public class StatsCollectorMBean implements DynamicMBean {
 
     @Override
     public MBeanInfo getMBeanInfo() {
-    	StatsSummary stats = collector.getDeltaSummary();
+    	StatsSummary stats = collector.getFullSummary();
     	MBeanAttributeInfo[] attrs = new MBeanAttributeInfo[stats.getCounters().size() + 
     	                                                    stats.getLabels().size()   +
     	                                                    stats.getMetrics().size() 
