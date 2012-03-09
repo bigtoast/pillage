@@ -70,9 +70,11 @@ public class GangliaStatsReporter implements StatsReporter {
 	public void send(InetAddress address, int port, String host,
 			String name, String value, String type, String units, int slope,
 			int tmax, int dmax) {
+		
+		DatagramSocket socket = null;
 
 		try {
-			DatagramSocket socket = new DatagramSocket();
+			socket = new DatagramSocket();
 			byte[] buf = writemeta(host, name, type, units, slope, tmax, dmax);
 			DatagramPacket p = new DatagramPacket(buf, buf.length, address,
 					port);
@@ -82,7 +84,9 @@ public class GangliaStatsReporter implements StatsReporter {
 			socket.send(p);
 		} catch (IOException e) {
 			// who cares
-		} 
+		} finally {
+			socket.close();
+		}
 	}
 
 	public void send(InetAddress address, int port, String host,

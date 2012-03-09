@@ -130,6 +130,16 @@ public class HistogramDistribution implements Distribution, Serializable {
         }
         return map;
     }
+    
+    @Override
+    public String toString(){
+    	StringBuilder str = new StringBuilder("{\n");
+    	for( Map.Entry<String, Number> entry : toMap().entrySet()){
+    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(" , \n");
+    	}
+    	str.append("}");
+    	return str.toString();
+    }
 
 	@Override
 	public int hashCode() {

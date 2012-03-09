@@ -144,4 +144,41 @@ public class StatsSummary {
         }
         return new StatsSummary(counters, metrics, labels);
     }
+    
+    @Override
+    public String toString(){
+    	StringBuilder str = new StringBuilder("{");
+    	str.append("counters : ").append(countersToString());
+    	str.append("metrics : ").append(metricsToString());
+    	str.append("labels : ").append(metricsToString());
+    	str.append("gauges : ").append(gaugesToString());
+    	return str.toString();
+    }
+    
+    private String countersToString(){
+    	StringBuilder str = new StringBuilder("{ \n");
+    	for( Map.Entry<String, Long> entry : counters.entrySet()){
+    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
+    	}
+    	str.append("} \n");
+    	return str.toString();
+    }
+    
+    private String metricsToString(){
+    	StringBuilder str = new StringBuilder("{ \n");
+    	for( Map.Entry<String, Distribution> entry : metrics.entrySet()){
+    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
+    	}
+    	str.append("} \n");
+    	return str.toString();
+    }
+    
+    private String gaugesToString(){
+    	StringBuilder str = new StringBuilder("{ \n");
+    	for( Map.Entry<String, Double> entry : gauges.entrySet()){
+    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
+    	}
+    	str.append("} \n");
+    	return str.toString();
+    }
 }
