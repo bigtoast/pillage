@@ -1,6 +1,6 @@
 
 [2012-3-9]
-0.3.7
+0.3.8
  * some retard ( me ) forgot to close the udp sockets after they are used.
  * added sane toString methods on StatsSummary
  * added a changelog ;) 
