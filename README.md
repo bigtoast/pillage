@@ -1,8 +1,8 @@
-Pillage ( Alpha. Still under development )
+Pillage
 =======
 
 A super lightweight stats and monitoring lib for the jvm. It provides counters, metrics, timers,
-labels and jvm stats. The goals are to be lightweight, fast, make good use of resources and be 
+labels, gauges and jvm stats. The goals are to be lightweight, fast, make good use of resources and be 
 flexible enough to easily hack on pieces when needed.
 
 The library was put together by pillaging a number of other open source libs ( hence the name ) for 
@@ -21,11 +21,15 @@ Counters just count things. They can be incremented, read and reset.
 
 ### Metrics
 Metrics are tracked with a Distribution. The the only current implementation is based on the Histogram
-in the Ostrich scala lib. It provides max, min, mean within 5% and percitiles.
+in the Ostrich scala lib. It provides max, min, mean within 5% and percentiles.
 
 ### Labels
 Labels are just string values. This also came from Ostrich and can be used to set flags 
 instead of holding statistical value.
+
+### Gauges
+Gauges are methods that can be functions that are executed when the stat is collected to get an reading
+at that instance.
 
 ### StatsSummary
 A StatsSummary contains Counters, Metrics and Labels for a set amount of time. A summary is an immutable
@@ -33,12 +37,12 @@ object and will throw exceptions if you try to mess with it.
 
 ### StatsContainer
 A StatsContainer is the client interface to interact with Pillage. Through this interface you can
-increment counters, add metrics, set labels, aquire summaries, etc.
+increment counters, add metrics, set labels, acquire summaries, etc.
 
 ### StatsCollector
 The StatsCollector interface is used to collect stats from the container for purposes of reporting 
 or aggregation. A collector will cache a set of stats from a StatsSummary and when the collect() method
-is called, it will aquire a new StatsSummary object and calculate the diff between the cached verison
+is called, it will acquire a new StatsSummary object and calculate the diff between the cached version
 and the new version and return that diff as a new StatsSummary object. The collect() method is 
 how you can see change over time which is good for graphing.
 
@@ -57,6 +61,12 @@ GangliaStatsReporter which will send the stats to a Ganlgia server over UDP.
 ### PeriodicStatsCollector
 This is a utility singleton that can be used to schedule regular calls to collect() for a given StatsCollector.
 
+
+Wrapper Projects
+----------------
+
+There are two wrapper projects that provide some groovy and scala syntax sugar. They allow timing with closures 
+and registering gauges with out having to use the Gauge interface.
 
 ------------------------------------------------
 

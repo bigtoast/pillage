@@ -1,5 +1,10 @@
 
-[2012-3-9]
+[2012-03-20]
+0.3.9
+ * made gauges part of the stats summary
+ * added gauge method that accepts by name function to register gauges in scala project
+
+[2012-03-09]
 0.3.8
  * some retard ( me ) forgot to close the udp sockets after they are used.
  * added sane toString methods on StatsSummary

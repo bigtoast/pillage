@@ -15,20 +15,10 @@ trait ScalaStatsContainer { self :StatsContainer =>
 	resp
   }
 	
-  /*
-  def gauge( name :String, func : => Any ) = {
-	registerGauge(name, new Gauge() {
-	  def read: Double = {
-		var ret = 0d
-		try {
-			ret = Double.valueOf( func() )
-		} catch {
-			case e :ClassCastException =>
-				// do nothing
-		} 
-	 }
-    })	
-  } */
+  
+  def gauge( name :String, func : => Double ) = {
+	registerGauge(name, new Gauge() { def read = func } )	
+  } 
 	
 }
 

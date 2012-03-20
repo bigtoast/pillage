@@ -212,15 +212,15 @@ public class StatsCollectorImpl implements StatsCollector {
         deltaGaugeMap = deltas;
     }
     
-    public static final String HEAP_USED           = "jvm.heap.used.bytes";
-    public static final String HEAP_USED_INIT      = "jvm.heap.init.bytes";
-    public static final String HEAP_USED_MAX       = "jvm.heap.used.max.bytes";
-    public static final String HEAP_USED_COMMITTED = "jvm.heap.used.committed.bytes";
+    public static final String HEAP_USED           = "jvm.heap.used.mbytes";
+    public static final String HEAP_USED_INIT      = "jvm.heap.init.mbytes";
+    public static final String HEAP_USED_MAX       = "jvm.heap.used.max.mbytes";
+    public static final String HEAP_USED_COMMITTED = "jvm.heap.used.committed.mbytes";
     
-    public static final String NONHEAP_USED           = "jvm.nonheap.used.bytes";
-    public static final String NONHEAP_USED_INIT      = "jvm.nonheap.used.init.bytes";
-    public static final String NONHEAP_USED_MAX       = "jvm.nonheap.used.max.bytes";
-    public static final String NONHEAP_USED_COMMITTED = "jvm.nonheap.used.committed.bytes";
+    public static final String NONHEAP_USED           = "jvm.nonheap.used.mbytes";
+    public static final String NONHEAP_USED_INIT      = "jvm.nonheap.used.init.mbytes";
+    public static final String NONHEAP_USED_MAX       = "jvm.nonheap.used.max.mbytes";
+    public static final String NONHEAP_USED_COMMITTED = "jvm.nonheap.used.committed.mbytes";
     
     public static final String THREAD_DAEMON_CNT = "jvm.thread.daemon.cnt";
     public static final String THREAD_CNT        = "jvm.thread.cnt";
@@ -251,16 +251,16 @@ public class StatsCollectorImpl implements StatsCollector {
     	Map<String, Double> map = new HashMap<String, Double>();
     	
     	MemoryUsage heapUsed = memory.getHeapMemoryUsage();
-    	map.put(HEAP_USED_INIT, (double) heapUsed.getInit());
-    	map.put(HEAP_USED_MAX, (double) heapUsed.getMax());
-    	map.put(HEAP_USED_COMMITTED, (double) heapUsed.getCommitted());
-    	map.put(HEAP_USED,(double) heapUsed.getUsed());
+    	map.put(HEAP_USED_INIT, (double) heapUsed.getInit() * 1024 * 1024);
+    	map.put(HEAP_USED_MAX, (double) heapUsed.getMax() * 1024 * 1024);
+    	map.put(HEAP_USED_COMMITTED, (double) heapUsed.getCommitted() * 1024 * 1024);
+    	map.put(HEAP_USED,(double) heapUsed.getUsed() * 1024 * 1024);
     	
     	MemoryUsage nonheapUsed = memory.getNonHeapMemoryUsage();
-    	map.put(NONHEAP_USED_INIT, (double) nonheapUsed.getInit());
-    	map.put(NONHEAP_USED_MAX, (double) nonheapUsed.getMax());
-    	map.put(NONHEAP_USED_COMMITTED, (double) nonheapUsed.getCommitted());
-    	map.put(NONHEAP_USED, (double) nonheapUsed.getUsed());
+    	map.put(NONHEAP_USED_INIT, (double) nonheapUsed.getInit() * 1024 * 1024);
+    	map.put(NONHEAP_USED_MAX, (double) nonheapUsed.getMax() * 1024 * 1024);
+    	map.put(NONHEAP_USED_COMMITTED, (double) nonheapUsed.getCommitted() * 1024 * 1024);
+    	map.put(NONHEAP_USED, (double) nonheapUsed.getUsed() * 1024 * 1024);
     	
     	// thread stats
     	map.put(THREAD_CNT, (double) threads.getThreadCount());

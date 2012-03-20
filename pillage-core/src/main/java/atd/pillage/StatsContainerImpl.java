@@ -224,7 +224,7 @@ public class StatsContainerImpl implements StatsContainer {
 	 */
 	@Override
 	public StatsSummary getSummary() {
-		return new StatsSummary(counters(), metrics(), labels(), start,
+		return new StatsSummary(counters(), metrics(), labels(), gauges(), start,
 				System.currentTimeMillis());
 	}
 

@@ -148,10 +148,11 @@ public class StatsSummary {
     @Override
     public String toString(){
     	StringBuilder str = new StringBuilder("{");
+    	str.append("labels : ").append(labelsToString());
     	str.append("counters : ").append(countersToString());
     	str.append("metrics : ").append(metricsToString());
-    	str.append("labels : ").append(metricsToString());
     	str.append("gauges : ").append(gaugesToString());
+    	str.append("} \n");
     	return str.toString();
     }
     
@@ -160,7 +161,7 @@ public class StatsSummary {
     	for( Map.Entry<String, Long> entry : counters.entrySet()){
     		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
     	}
-    	str.append("} \n");
+    	str.append("}, \n");
     	return str.toString();
     }
     
@@ -169,7 +170,16 @@ public class StatsSummary {
     	for( Map.Entry<String, Distribution> entry : metrics.entrySet()){
     		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
     	}
-    	str.append("} \n");
+    	str.append("}, \n");
+    	return str.toString();
+    }
+    
+    private String labelsToString(){
+    	StringBuilder str = new StringBuilder("{ \n");
+    	for( Map.Entry<String, String> entry : labels.entrySet()){
+    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
+    	}
+    	str.append("}, \n");
     	return str.toString();
     }
     
@@ -178,7 +188,7 @@ public class StatsSummary {
     	for( Map.Entry<String, Double> entry : gauges.entrySet()){
     		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
     	}
-    	str.append("} \n");
+    	str.append("}, \n");
     	return str.toString();
     }
 }
