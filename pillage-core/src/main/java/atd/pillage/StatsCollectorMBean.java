@@ -26,14 +26,20 @@ import javax.management.*;
 public class StatsCollectorMBean implements DynamicMBean {
 
     private StatsCollector collector;
+    private boolean collectDeltas;
     
-    public StatsCollectorMBean( StatsCollector collector ){
+    public StatsCollectorMBean( StatsCollector collector , boolean collectDeltas ){
     	this.collector = collector;
+    	this.collectDeltas = collectDeltas;
     }
 
     @Override
     public Object getAttribute(String attribute) throws AttributeNotFoundException, MBeanException, ReflectionException {
-     StatsSummary stats = collector.getDeltaSummary();
+     StatsSummary stats;
+     if ( collectDeltas )
+    	 stats = collector.getDeltaSummary();
+     else 
+    	 stats = collector.getFullSummary();
      
      if(stats.getCounters().containsKey(attribute)){
     	 return stats.getCounters().get(attribute);
@@ -58,7 +64,12 @@ public class StatsCollectorMBean implements DynamicMBean {
 
     @Override
     public AttributeList getAttributes(String[] attributes) {
-    	StatsSummary stats = collector.getFullSummary();
+    	StatsSummary stats;
+        if ( collectDeltas )
+       	 stats = collector.getDeltaSummary();
+        else 
+       	 stats = collector.getFullSummary();
+        
         AttributeList list = new AttributeList();
         for(String attribute :attributes){
         	if( stats.getCounters().containsKey(attribute)){
@@ -87,7 +98,12 @@ public class StatsCollectorMBean implements DynamicMBean {
 
     @Override
     public MBeanInfo getMBeanInfo() {
-    	StatsSummary stats = collector.getFullSummary();
+    	StatsSummary stats;
+        if ( collectDeltas )
+       	 stats = collector.getDeltaSummary();
+        else 
+       	 stats = collector.getFullSummary();
+        
     	MBeanAttributeInfo[] attrs = new MBeanAttributeInfo[stats.getCounters().size() + 
     	                                                    stats.getLabels().size()   +
     	                                                    stats.getMetrics().size() 
@@ -104,6 +120,7 @@ public class StatsCollectorMBean implements DynamicMBean {
     	for (Map.Entry<String, Distribution> entry : stats.getMetrics().entrySet()  ){
     		attrs[i++] = new MBeanAttributeInfo(entry.getKey(),"java.util.Map<String,Number>", "Metric Distribution: " + entry.getKey(), false, false, false );
     	}
+    	
         return new MBeanInfo(collector.getClass().getCanonicalName(),
         							  "A stats container mBean",
         							  attrs,
