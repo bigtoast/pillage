@@ -1,4 +1,12 @@
 
+[2012-04-02]
+ * Fixed bytes to mbytes conversion in jvm stats. 
+
+[2012-03-21]
+0.3.11
+ * Added gmetric stats reporter to report to ganglia via the gmetric system command
+ * Made the mbean pull delta or full stats bases on a constructor param 
+
 [2012-03-20]
 0.3.9
  * made gauges part of the stats summary

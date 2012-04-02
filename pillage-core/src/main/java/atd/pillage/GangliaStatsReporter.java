@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
  * An implementation of StatsReporter that fires a StatsSummary to 
  * Ganglia over UDP.
  * 
- * This code was largly taken from <a href="http://code.google.com/p/embeddedgmetric/" target="_blank">EmbeddedGMetric</a>
+ * This code was largely taken from <a href="http://code.google.com/p/embeddedgmetric/" target="_blank">EmbeddedGMetric</a>
  * 
  * @author andy
  */

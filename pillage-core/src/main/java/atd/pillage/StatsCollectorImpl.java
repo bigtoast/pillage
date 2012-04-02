@@ -251,16 +251,16 @@ public class StatsCollectorImpl implements StatsCollector {
     	Map<String, Double> map = new HashMap<String, Double>();
     	
     	MemoryUsage heapUsed = memory.getHeapMemoryUsage();
-    	map.put(HEAP_USED_INIT, (double) heapUsed.getInit() * 1024 * 1024);
-    	map.put(HEAP_USED_MAX, (double) heapUsed.getMax() * 1024 * 1024);
-    	map.put(HEAP_USED_COMMITTED, (double) heapUsed.getCommitted() * 1024 * 1024);
-    	map.put(HEAP_USED,(double) heapUsed.getUsed() * 1024 * 1024);
+    	map.put(HEAP_USED_INIT, (double) heapUsed.getInit() / (1024 * 1024));
+    	map.put(HEAP_USED_MAX, (double) heapUsed.getMax() / (1024 * 1024));
+    	map.put(HEAP_USED_COMMITTED, (double) heapUsed.getCommitted() / (1024 * 1024));
+    	map.put(HEAP_USED,(double) heapUsed.getUsed() / ( 1024 * 1024 ));
     	
     	MemoryUsage nonheapUsed = memory.getNonHeapMemoryUsage();
-    	map.put(NONHEAP_USED_INIT, (double) nonheapUsed.getInit() * 1024 * 1024);
-    	map.put(NONHEAP_USED_MAX, (double) nonheapUsed.getMax() * 1024 * 1024);
-    	map.put(NONHEAP_USED_COMMITTED, (double) nonheapUsed.getCommitted() * 1024 * 1024);
-    	map.put(NONHEAP_USED, (double) nonheapUsed.getUsed() * 1024 * 1024);
+    	map.put(NONHEAP_USED_INIT, (double) nonheapUsed.getInit() / ( 1024 * 1024 ) );
+    	map.put(NONHEAP_USED_MAX, (double) nonheapUsed.getMax() / ( 1024 * 1024 ) );
+    	map.put(NONHEAP_USED_COMMITTED, (double) nonheapUsed.getCommitted() / ( 1024 * 1024 ));
+    	map.put(NONHEAP_USED, (double) nonheapUsed.getUsed() / ( 1024 * 1024));
     	
     	// thread stats
     	map.put(THREAD_CNT, (double) threads.getThreadCount());
