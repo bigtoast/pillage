@@ -87,7 +87,7 @@ public class GMetricStatsReporter implements StatsReporter {
 			canReport = true;
 		}
 		
-		if ( host == null ){
+		if ( host != null ){
 			this.host = host;
 		} else {
 			try {
@@ -149,6 +149,7 @@ public class GMetricStatsReporter implements StatsReporter {
 	private void execute(String cmd){
 		try{
 			Runtime.getRuntime().exec(cmd);
+			//System.out.println(cmd);
 		} catch  ( IOException e ){
 			// do nothing because we are nice an unobtrusive
 		}
@@ -164,7 +165,7 @@ public class GMetricStatsReporter implements StatsReporter {
 	}
 	
 	private StringBuilder newCommand(){
-		return new StringBuilder(gMetric).append(SLOPE_BOTH).append(HOST).append(host);
+		return new StringBuilder(gMetric).append(SLOPE_BOTH); //.append(HOST).append(host);
 	}
 	
 	private void reportDouble(String metric, String value){

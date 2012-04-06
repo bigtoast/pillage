@@ -16,7 +16,7 @@ allprojects {
         apply plugin: 'idea'
 
         sourceCompatibility = JavaVersion.VERSION_1_6
-        version = '0.3.12'
+        version = '0.3.13'
 
         group = "atd"
 		
@@ -38,7 +38,7 @@ subprojects {
 	
 	task publishDocs(type: Copy, dependsOn: "javadoc") {
 		from 'build/docs'
-		into '/Users/andrew/Projects/BigToast/bigtoast.github.com/docs/pillage-core/0.3.11'
+		into '/Users/andrew/Projects/BigToast/bigtoast.github.com/docs/pillage-core/0.3.13'
 	}
 	
 	repositories {
