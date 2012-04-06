@@ -132,7 +132,7 @@ public class GMetricStatsReporter implements StatsReporter {
 	private void reportMetric( String metric, Distribution distribution ){
       for( Map.Entry<String, Number> entry :distribution.toMap().entrySet() ){
     	  StringBuilder str = new StringBuilder(metric);
-    	  str.append("[").append(entry.getKey()).append("]");
+    	  str.append("-").append(entry.getKey());
     	  reportDouble(str.toString(), entry.getValue().toString() );
       }
 	}
@@ -140,7 +140,7 @@ public class GMetricStatsReporter implements StatsReporter {
 	private void reportLabel(String label, String value ){
 		StringBuilder cmd = newCommand();
 		cmd.append(NAME).append(label);
-		cmd.append(VALUE).append(value);
+		cmd.append(VALUE).append('"').append(value).append('"');
 		cmd.append(STRING);
 		
 		execute( cmd.toString() );
@@ -148,8 +148,8 @@ public class GMetricStatsReporter implements StatsReporter {
 	
 	private void execute(String cmd){
 		try{
+			System.out.println(cmd);
 			Runtime.getRuntime().exec(cmd);
-			//System.out.println(cmd);
 		} catch  ( IOException e ){
 			// do nothing because we are nice an unobtrusive
 		}

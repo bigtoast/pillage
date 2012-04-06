@@ -1,3 +1,11 @@
+[2012-04-06]
+0.3.15
+ * Added system.out.println to gmetric stats reporter. this is temporary
+
+
+[2012-04-06]
+0.3.14
+ * replaced brackets in stats reporting to use dot because the brackets screw up ganglia
 
 [2012-04-06]
 0.3.13

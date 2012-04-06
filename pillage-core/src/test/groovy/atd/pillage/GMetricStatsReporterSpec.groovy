@@ -27,6 +27,7 @@ class GMetricStatsReporterSpec extends Specification {
 	def setupSpec() {
 		stats = new StatsContainerImpl( new HistogramMetricFactory() ) 
 		collector = new StatsCollectorImpl( stats )
+		collector.includeJvmStats( true )
 		reporter = new GMetricStatsReporter("/usr/local/bin/gmetric")
 	}
 	
@@ -45,7 +46,16 @@ class GMetricStatsReporterSpec extends Specification {
 			  } 
 	      })
 		  
-		  reporter.report( stats.getSummary() )
+		  reporter.report( collector.getDeltaSummary() )
+		  
+		  stats.incr "cnt1", 50
+		  timer.start()
+		  Thread.sleep(100)
+		  timer.stop()
+		  
+		  reporter.report( collector.getDeltaSummary() )
+		  
+		  reporter.report( collector.getFullSummary() )
 		  
 		then: 
 		  reporter.canReport() == true
