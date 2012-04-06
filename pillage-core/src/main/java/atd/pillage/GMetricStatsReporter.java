@@ -123,7 +123,7 @@ public class GMetricStatsReporter implements StatsReporter {
 		  }
 		  
 		  for ( Map.Entry<String, Double> entry :stats.getGauges().entrySet()){
-			  reportDouble( entry.getKey(), entry.getValue().toString() );
+			  reportDouble( entry.getKey(), entry.getValue() );
 		  }
      }
 
@@ -133,7 +133,7 @@ public class GMetricStatsReporter implements StatsReporter {
       for( Map.Entry<String, Number> entry :distribution.toMap().entrySet() ){
     	  StringBuilder str = new StringBuilder(metric);
     	  str.append("-").append(entry.getKey());
-    	  reportDouble(str.toString(), entry.getValue().toString() );
+    	  reportDouble(str.toString(), entry.getValue().doubleValue() );
       }
 	}
 	
@@ -168,10 +168,12 @@ public class GMetricStatsReporter implements StatsReporter {
 		return new StringBuilder(gMetric).append(SLOPE_BOTH); //.append(HOST).append(host);
 	}
 	
-	private void reportDouble(String metric, String value){
+	private void reportDouble(String metric, double value){
+		double val = Math.round(value * 100) / 100;
+		
 		StringBuilder cmd = newCommand();
 		cmd.append(NAME).append(metric);
-		cmd.append(VALUE).append(value);
+		cmd.append(VALUE).append(val);
 		cmd.append(DOUBLE);
 		
 		execute( cmd.toString() );
