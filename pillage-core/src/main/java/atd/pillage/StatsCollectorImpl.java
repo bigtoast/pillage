@@ -108,7 +108,13 @@ public class StatsCollectorImpl implements StatsCollector {
      */
 	@Override
 	public StatsSummary getDeltaSummary() {
-		return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), deltaGaugeMap, lastSnap, currentSnap);
+		if ( ! includeJvmStats )
+			return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), container.gauges() , lastSnap, currentSnap);
+		else {
+			Map<String, Double> gauges = getJvmStats();
+	    	gauges.putAll(container.gauges());
+	    	return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), gauges , lastSnap, currentSnap);
+		}
 	}
 
 	/**
@@ -117,7 +123,7 @@ public class StatsCollectorImpl implements StatsCollector {
 	@Override
 	public StatsSummary collect() {
 		triggerCounterSnap();
-		triggerGaugeSnap();
+		//triggerGaugeSnap();
 		triggerMetricSnap();
 		lastSnap = currentSnap;
 		currentSnap = System.currentTimeMillis();

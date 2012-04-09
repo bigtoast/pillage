@@ -1,3 +1,7 @@
+[2012-04-09]
+0.3.17
+ * removed diff calc for gauges. Diffs should just be for counters and metrics.
+
 [2012-04-06]
 0.3.16
  * Set rounding to 2 sig figs for doubles in gmetric stats reporter

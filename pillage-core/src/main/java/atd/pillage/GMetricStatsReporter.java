@@ -148,7 +148,6 @@ public class GMetricStatsReporter implements StatsReporter {
 	
 	private void execute(String cmd){
 		try{
-			System.out.println(cmd);
 			Runtime.getRuntime().exec(cmd);
 		} catch  ( IOException e ){
 			// do nothing because we are nice an unobtrusive
