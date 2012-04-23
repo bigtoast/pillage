@@ -16,13 +16,14 @@ class GroovyStatsContainer implements StatsContainer {
 		c.delegate = timer
 		c.resolveStrategy = Closure.DELEGATE_FIRST
 		timer.start()
-		c()
+		def returnValue = c()
 		timer.stop()
+        returnValue
 	} 
 	
 	def registerGauge(String gaugeName, Closure c ) {
 		container.registerGauge(gaugeName, new Gauge() {
-			public double read(){
+			double read(){
 				def ret = 0
 				try {
 					ret = (double) c()
