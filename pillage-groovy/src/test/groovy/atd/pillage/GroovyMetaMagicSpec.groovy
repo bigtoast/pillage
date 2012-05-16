@@ -2,7 +2,6 @@
 package atd.pillage
 
 import spock.lang.*
-import GroovyMetaMagic.*
 
 class GroovyMetaMagicSpec extends Specification {
 	/*

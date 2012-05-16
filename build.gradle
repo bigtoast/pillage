@@ -15,18 +15,19 @@ allprojects {
         apply plugin: 'eclipse'
         apply plugin: 'idea'
 
-        sourceCompatibility = JavaVersion.VERSION_1_6
+        ext.sourceCompatibility = JavaVersion.VERSION_1_6
+
         version = '0.3.17'
 
         group = "atd"
-		
+
 }
  
 subprojects {
  
-		apply plugin: 'groovy'
-        apply plugin: 'java'
-		apply plugin: 'maven'	
+    apply plugin: 'groovy'
+    apply plugin: 'java'
+    apply plugin: 'maven'
 
 	uploadArchives {
 		repositories {
@@ -38,7 +39,7 @@ subprojects {
 	
 	task publishDocs(type: Copy, dependsOn: "javadoc") {
 		from 'build/docs'
-		into '/Users/andrew/Projects/BigToast/bigtoast.github.com/docs/pillage-core/0.3.17'
+		into 'published/docs/pillage-core/0.3.17'
 	}
 	
 	repositories {
@@ -46,9 +47,9 @@ subprojects {
 	}
 	
 	dependencies {
-	    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.8.2'
-	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.8' ){
-			exclude(group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.8.0-beta-3-SNAPSHOT')
+	    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.8'
+	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.7' ){
+			exclude(group: 'org.codehaus.groovy', module: 'groovy-all')
 		}
 	}
 

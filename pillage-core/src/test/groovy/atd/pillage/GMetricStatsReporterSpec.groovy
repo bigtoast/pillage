@@ -28,7 +28,7 @@ class GMetricStatsReporterSpec extends Specification {
 		stats = new StatsContainerImpl( new HistogramMetricFactory() ) 
 		collector = new StatsCollectorImpl( stats )
 		collector.includeJvmStats( true )
-		reporter = new GMetricStatsReporter("/usr/local/bin/gmetric")
+		reporter = new GMetricStatsReporter("/bin/sh")
 	}
 	
 	def "reporter should report stuff"(){
