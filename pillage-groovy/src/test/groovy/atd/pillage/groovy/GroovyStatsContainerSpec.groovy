@@ -1,9 +1,33 @@
 package atd.pillage.groovy
 
-import spock.lang.*
-import atd.pillage.*
+import atd.pillage.HistogramMetricFactory
+import atd.pillage.StatsContainerImpl
+import atd.pillage.StatsSummary
+import spock.lang.Specification
+import atd.pillage.Distribution
 
 class GroovyStatsContainerSpec extends Specification {
+    
+    def "The time method should return the actual result of the nested closure"() {
+        given:
+            final String resultString = "the closure's result"
+            final String timerName = "test_timer"
+            final String expectedMetricName = "${timerName}.millis"
+            def container = new GroovyStatsContainer( new StatsContainerImpl(new HistogramMetricFactory()))
+        when:
+            def result = container.time(timerName) {
+                Thread.currentThread().sleep(200)
+                return resultString
+            }
+
+        then:
+            result == resultString
+            StatsSummary summary = container.summary
+            Distribution distribution = summary.metrics.get(expectedMetricName)
+            distribution != null
+            distribution.count == 1
+            distribution.maximum >= 200
+    }
 
 	def "The time method should be added to the StatsContainer interface"(){
 		given:
@@ -19,7 +43,7 @@ class GroovyStatsContainerSpec extends Specification {
 			sum.getMetrics().size() == 1
 			def metric = sum.getMetrics().get("test_timer.millis")
 			metric.getCount() == 1
-			metric.getSum() > 1000
+			metric.getSum() >= 1000
 			metric.getSum() < 2000
 	}
 	
