@@ -1,3 +1,12 @@
+[2012-07-19]
+34.2
+  * Merged in GraphiteStatsReporter from another branch. Added AcyncMetric
+
+[2012-07-19]
+34.0
+ * added AsyncStatsContainer that wraps the normal stats container. It does async writes 
+   for metrics, counters and labels.
+
 [2012-04-09]
 0.3.17
  * removed diff calc for gauges. Diffs should just be for counters and metrics.

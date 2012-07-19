@@ -22,4 +22,4 @@ trait ScalaStatsContainer { self :StatsContainer =>
 	
 }
 
-object PillageStats extends StatsContainerImpl( new HistogramMetricFactory ) with ScalaStatsContainer 
+//object PillageStats extends StatsContainerImpl( new HistogramMetricFactory ) with ScalaStatsContainer 

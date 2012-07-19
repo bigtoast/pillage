@@ -2,10 +2,11 @@ package atd.pillage.scala
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
-import atd.pillage.Gauge
+import atd.pillage._
 
 class ScalaStatsContainerSpecs extends WordSpec with ShouldMatchers {
 
+  object PillageStats extends StatsContainerImpl( new HistogramMetricFactory ) with ScalaStatsContainer 
   "testing in gradle" should {
     "freakin work" in {
       1 should be (1)

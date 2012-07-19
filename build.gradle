@@ -34,7 +34,7 @@ allprojects {
 
         ext.sourceCompatibility = JavaVersion.VERSION_1_6
 
-        version = '30.0'
+        version = '34.2'
 
         group = "com.ticketfly"
 

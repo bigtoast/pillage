@@ -30,33 +30,6 @@ public class Timer implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -8365175010198525518L;
 
-	public static class TimerMetric {
-		private String name;
-		private long value;
-
-		public TimerMetric(String name, long value) {
-			this.name = name;
-			this.value = value;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public long getValue() {
-			return value;
-		}
-
-		public String toString() {
-			StringBuilder str = new StringBuilder();
-			str.append(name);
-			str.append("[");
-			str.append(value);
-			str.append("]");
-			return str.toString();
-		}
-	}
-
 	private long startTime = 0;
 	private long elapsedTime = 0;
 
@@ -64,7 +37,6 @@ public class Timer implements Serializable, Cloneable {
 	private String safeName;
 	private StatsContainer container;
 	private AtomicBoolean running = new AtomicBoolean(false);
-	private ConcurrentLinkedQueue<TimerMetric> queue = new ConcurrentLinkedQueue<TimerMetric>();
 
 	public Timer(StatsContainer container, String name) {
 		this(container, name, false);
@@ -151,9 +123,7 @@ public class Timer implements Serializable, Cloneable {
 		if (running.getAndSet(false) == true) {
 			elapsedTime = System.currentTimeMillis() - startTime;
 			String mName = metricName(milestone);
-			Metric m = container.getMetric(mName);
-			m.add((int) elapsedTime);
-			queue.add(new TimerMetric(metricName(milestone), elapsedTime));
+			container.add(mName,(int) elapsedTime);
 		}
 		return elapsedTime;
 	}
@@ -166,8 +136,7 @@ public class Timer implements Serializable, Cloneable {
 	public long stop() {
 		if (running.getAndSet(false) == true) {
 			elapsedTime = System.currentTimeMillis() - startTime;
-			Metric m = container.getMetric(metricName(null));
-			m.add((int) elapsedTime);
+			container.add(metricName(null),(int) elapsedTime);
 		}
 		return elapsedTime;
 	}
@@ -180,8 +149,7 @@ public class Timer implements Serializable, Cloneable {
 	public long lap(String lap) {
 		if(running.get()){
 			elapsedTime = System.currentTimeMillis() - startTime;
-			Metric m = container.getMetric(metricName(lap));
-			m.add((int) elapsedTime);
+			container.add(metricName(lap),(int) elapsedTime);
 		}
 		return elapsedTime;
 	}
@@ -208,17 +176,6 @@ public class Timer implements Serializable, Cloneable {
 		long elapsed = stop(milestone);
 		start();
 		return elapsed;
-	}
-
-	// --- Object Methods ---
-	@Override
-	public String toString() {
-		StringBuilder str = new StringBuilder();
-		for (TimerMetric metric : queue) {
-			str.append(metric.toString());
-			str.append(" : ");
-		}
-		return str.toString();
 	}
 
 	public Timer clone() {
