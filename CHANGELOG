@@ -1,3 +1,8 @@
+[2012-07-23]
+34.3
+  * Added shutdown to async stats container
+  * Wrapped socket in BufferedOutputStream in GraphiteStatsReporter
+
 [2012-07-19]
 34.2
   * Merged in GraphiteStatsReporter from another branch. Added AcyncMetric

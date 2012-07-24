@@ -62,6 +62,10 @@ public class AsyncStatsContainer implements StatsContainer {
 		executor.execute( new AsyncStatsListener() );		
 	}
 	
+	public void shutdown() {
+		this.executor.shutdown();
+	}
+	
 	private static class AddMetric implements StatsCommand {
 		final public String name;
 		final public int value;

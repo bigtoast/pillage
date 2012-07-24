@@ -1,5 +1,6 @@
 package atd.pillage;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -118,7 +119,7 @@ public class GraphiteStatsReporter implements StatsReporter {
 		Socket socket = null;
 		try {
 			socket = new Socket(graphiteAddress, port);
-			return new PrintWriter(socket.getOutputStream(), true);
+			return new PrintWriter( new BufferedOutputStream( socket.getOutputStream() ), true);
 		} catch (IOException e) {
 			if (socket != null) {
 				socket.close();
