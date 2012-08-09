@@ -11,56 +11,19 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-buildscript {
-    repositories {
-        maven {
-            url 'http://build.ticketfly.com/artifactory/plugins-release'
-            credentials {
-                username = "${artifactory_user}"
-                password = "${artifactory_password}"
-            }
-        }
-
-    }
-    dependencies {
-        classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '2.0.12')
-    }
-}
 
 allprojects {
         apply plugin: 'eclipse'
         apply plugin: 'idea'
-        apply plugin: 'artifactory'
 
         ext.sourceCompatibility = JavaVersion.VERSION_1_6
 
-        version = '34.3'
+        version = '35.0'
 
         group = "com.ticketfly"
 
 }
 
-artifactory {
-    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
-    publish {
-        repository {
-            repoKey = 'libs-release-local'
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
-            maven = true
-
-        }
-    }
-    resolve {
-        repository {
-            repoKey = 'libs-release'
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
-            maven = true
-
-        }
-    }
-}
 
 subprojects {
  
@@ -68,9 +31,17 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
 
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				repository( url: "../../../ticketfly.github.com/repo/" )
+			}
+		}
+	}
+	
 	task publishDocs(type: Copy, dependsOn: "javadoc") {
 		from 'build/docs'
-		into 'published/docs/pillage-core/0.3.17'
+		into '../../ticketfly.github.com/docs/pillage-core/35.0'
 	}
 	
 	repositories {

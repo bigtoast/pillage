@@ -14,6 +14,23 @@ Libraries pillaged thus far:
 - [Perf4j](http://perf4j.codehaus.org/)
 - [embeddedgmetric](http://code.google.com/p/embeddedgmetric/)
 
+
+Get Started
+-----------
+Repository
+http://ticketfly.github.com/repo
+
+group: 
+ + com.ticketfly
+ 
+artifacts: 
+ + pillage-core 
+ + pillage-groovy
+ + pillage-scala
+
+version:
+ + 35.0
+
 Components
 ----------
 ### Counters
@@ -39,6 +56,9 @@ object and will throw exceptions if you try to mess with it.
 A StatsContainer is the client interface to interact with Pillage. Through this interface you can
 increment counters, add metrics, set labels, acquire summaries, etc.
 
+ * StatsContainerImpl standard interface
+ * AsyncStatsContainer wraps a stats container and records stats to the wrapped container asynchronously 
+
 ### StatsCollector
 The StatsCollector interface is used to collect stats from the container for purposes of reporting 
 or aggregation. A collector will cache a set of stats from a StatsSummary and when the collect() method
@@ -55,8 +75,12 @@ A stats collector can have listeners attached called StatsReporters that will re
 when collect() is called.
 
 ### StatsReporter
-A StatsReporter has just one method report that takes in a StatsSummary. There is currently one implementation,
-GangliaStatsReporter which will send the stats to a Ganlgia server over UDP.
+A StatsReporter has just one method report that takes in a StatsSummary. Multiple reporters can be configured.
+
+ * GangliaStatsReporter sends to Ganglia over UDP
+ * GraphiteStatsReporter sends to Graphite over TCP
+ * GMetricStatsReporter sends stats to Ganaglia using the gmetric command line tool ( Not the best, but useful if UDP is unavailable )
+ * ConsoleStatsReporter sends stats to System.out
 
 ### PeriodicStatsCollector
 This is a utility singleton that can be used to schedule regular calls to collect() for a given StatsCollector.
@@ -71,15 +95,12 @@ and registering gauges with out having to use the Gauge interface.
 ------------------------------------------------
 
 ## TODO
-+ create some other reporters ( logging, graphite )
++ create some other reporters ( logging )
 + make calls to report() non blocking. A call to report will most likely involve IO so if it hangs I don't
 want it to cause a backup or other bad things.
-+ add gauges through reflection. This is a really cool feature in Ostrich but since java doesn't have
-closures it is a bit more difficult to implement.
 + standardize the stats naming, I think it is a bit all over the place right now.
 + enable PeriodicStatsCollector to be restarted. Right now if the thread dies the app will have to be restarted
 to work on reporting.
 + try alternate metric backings. Histogram is cool but I would like to collect some other things like stddev, skew etc.
 + Profiled annotation like Perf4js
-+ get some production usage and iterate!
 

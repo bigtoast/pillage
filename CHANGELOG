@@ -1,3 +1,20 @@
+[2012-08-02]
+35.0
+  * changed base package name from atd to com.ticketfly
+  * changed deployment from private artifactory to public github. whoo hoo
+
+[2012-07-26]
+34.6
+  * added lifetime flag to gmetric reporter. It is hardcoded to 60 seconds"
+
+[2012-07-23]
+34.5
+  * minor update to async container
+
+[2012-07-23]
+34.4
+  * should have been shutdownNow
+
 [2012-07-23]
 34.3
   * Added shutdown to async stats container
