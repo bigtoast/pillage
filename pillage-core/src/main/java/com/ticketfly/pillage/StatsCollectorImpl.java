@@ -111,9 +111,9 @@ public class StatsCollectorImpl implements StatsCollector {
 		if ( ! includeJvmStats )
 			return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), container.gauges() , lastSnap, currentSnap);
 		else {
-			Map<String, Double> gauges = getJvmStats();
-	    	gauges.putAll(container.gauges());
-	    	return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), gauges , lastSnap, currentSnap);
+			//Map<String, Double> gauges = getJvmStats();
+	    	//gauges.putAll(container.gauges());
+	    	return new StatsSummary(deltaCounterMap, deltaMetricMap, container.labels(), deltaGaugeMap , lastSnap, currentSnap);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class StatsCollectorImpl implements StatsCollector {
 	@Override
 	public StatsSummary collect() {
 		triggerCounterSnap();
-		//triggerGaugeSnap();
+		triggerGaugeSnap();
 		triggerMetricSnap();
 		lastSnap = currentSnap;
 		currentSnap = System.currentTimeMillis();
@@ -250,11 +250,11 @@ public class StatsCollectorImpl implements StatsCollector {
      * @return
      */
     public Map<String, Double> getJvmStats(){
-    	MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
-    	ThreadMXBean threads = ManagementFactory.getThreadMXBean();
-    	RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+    	MemoryMXBean memory        = ManagementFactory.getMemoryMXBean();
+    	ThreadMXBean threads       = ManagementFactory.getThreadMXBean();
+    	RuntimeMXBean runtime      = ManagementFactory.getRuntimeMXBean();
     	ClassLoadingMXBean classes = ManagementFactory.getClassLoadingMXBean();
-    	Map<String, Double> map = new HashMap<String, Double>();
+    	Map<String, Double> map    = new HashMap<String, Double>();
     	
     	MemoryUsage heapUsed = memory.getHeapMemoryUsage();
     	map.put(HEAP_USED_INIT, (double) heapUsed.getInit() / (1024 * 1024));

@@ -1,3 +1,11 @@
+[2013-05-08]
+56.0
+  * added new relic stats reporter
+  * added filtering stats reporter
+  * fixed jvm stats in stats collector to report diffs
+  * added internal json lib
+  * toString on summary returns json
+
 [2012-08-02]
 35.0
   * changed base package name from atd to com.ticketfly

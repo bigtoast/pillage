@@ -120,7 +120,7 @@ public class StatsSummary {
      * passed in.
      * 
      * @param pattern
-     * @return
+     * @return StatsSummary
      */
     public StatsSummary filterOut(Pattern pattern){
         Map<String, Long> counters = new HashMap<String, Long>();
@@ -144,51 +144,42 @@ public class StatsSummary {
         }
         return new StatsSummary(counters, metrics, labels);
     }
+
+    /** Create a new StatsSummary object by keeping only the stats that match the given pattern.
+     *
+     * @param pattern
+     * @return StatsSummary
+     */
+    public StatsSummary filter(Pattern pattern){
+        Map<String, Long> counters = new HashMap<String, Long>();
+        Map<String, Distribution> metrics = new HashMap<String, Distribution>();
+        Map<String, String> labels = new HashMap<String, String>();
+
+        for(Map.Entry<String, Long> entry :this.counters.entrySet()){
+            if(pattern.matcher(entry.getKey()).matches()){
+                counters.put(entry.getKey(), entry.getValue());
+            }
+        }
+        for(Map.Entry<String, Distribution> entry :this.metrics.entrySet()){
+            if(pattern.matcher(entry.getKey()).matches()){
+                metrics.put(entry.getKey(), entry.getValue());
+            }
+        }
+        for(Map.Entry<String, String> entry :this.labels.entrySet()){
+            if(pattern.matcher(entry.getKey()).matches()){
+                labels.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return new StatsSummary(counters, metrics, labels);
+    }
     
     @Override
     public String toString(){
-    	StringBuilder str = new StringBuilder("{");
-    	str.append("labels : ").append(labelsToString());
-    	str.append("counters : ").append(countersToString());
-    	str.append("metrics : ").append(metricsToString());
-    	str.append("gauges : ").append(gaugesToString());
-    	str.append("} \n");
-    	return str.toString();
+        try {
+    	    return StatUtils.toJSON(this);
+        } catch( Exception e ) {
+            return "{ \"error\":\"" + e.getMessage() + "\" }";
+        }
     }
-    
-    private String countersToString(){
-    	StringBuilder str = new StringBuilder("{ \n");
-    	for( Map.Entry<String, Long> entry : counters.entrySet()){
-    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
-    	}
-    	str.append("}, \n");
-    	return str.toString();
-    }
-    
-    private String metricsToString(){
-    	StringBuilder str = new StringBuilder("{ \n");
-    	for( Map.Entry<String, Distribution> entry : metrics.entrySet()){
-    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
-    	}
-    	str.append("}, \n");
-    	return str.toString();
-    }
-    
-    private String labelsToString(){
-    	StringBuilder str = new StringBuilder("{ \n");
-    	for( Map.Entry<String, String> entry : labels.entrySet()){
-    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
-    	}
-    	str.append("}, \n");
-    	return str.toString();
-    }
-    
-    private String gaugesToString(){
-    	StringBuilder str = new StringBuilder("{ \n");
-    	for( Map.Entry<String, Double> entry : gauges.entrySet()){
-    		str.append(entry.getKey()).append(": ").append(entry.getValue()).append(", \n");
-    	}
-    	str.append("}, \n");
-    	return str.toString();
-    }
+
 }

@@ -133,7 +133,7 @@ public class GMetricStatsReporter implements StatsReporter {
 	private void reportMetric( String metric, Distribution distribution ){
       for( Map.Entry<String, Number> entry :distribution.toMap().entrySet() ){
     	  StringBuilder str = new StringBuilder(metric);
-    	  str.append("-").append(entry.getKey());
+    	  str.append(".").append(entry.getKey());
     	  reportDouble(str.toString(), entry.getValue().doubleValue() );
       }
 	}

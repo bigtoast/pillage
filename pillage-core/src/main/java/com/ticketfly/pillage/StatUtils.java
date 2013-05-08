@@ -16,6 +16,12 @@
 
 package com.ticketfly.pillage;
 
+import com.ticketfly.pillage.org.json.JSONException;
+import com.ticketfly.pillage.org.json.JSONObject;
+import com.ticketfly.pillage.org.json.JSONStringer;
+
+import java.util.Map;
+
 /**
  * StatUtilities
  */
@@ -48,5 +54,42 @@ public class StatUtils {
 					+ (newValue - Double.MIN_VALUE) + 1;
 		}
 	}
+
+    public static String toJSON(StatsSummary stats) throws JSONException {
+        JSONStringer json = new JSONStringer();
+
+        json.object().key("counters").array();
+        for( Map.Entry<String,Long> entry : stats.getCounters().entrySet() ) {
+            json.object().key(entry.getKey()).value(entry.getValue()).endObject();
+        }
+
+        json.endArray().key("metrics").array();
+
+        for ( Map.Entry<String,Distribution> entry : stats.getMetrics().entrySet() ) {
+            json.object()
+                .key(entry.getKey());
+
+            Map<String,Number> metrics = entry.getValue().toMap();
+            for ( Map.Entry<String,Number> metric : metrics.entrySet() ) {
+                json.object().key(metric.getKey()).value(metric.getValue()).endObject();
+            }
+
+            json.endObject();
+        }
+
+        json.endArray().key("labels").array();
+
+        for ( Map.Entry<String,String> entry : stats.getLabels().entrySet() ) {
+            json.object().key(entry.getKey()).value(entry.getValue()).endObject();
+        }
+
+        json.endArray().key("gauges").array();
+
+        for ( Map.Entry<String,Double> entry : stats.getGauges().entrySet()) {
+            json.object().key(entry.getKey()).value(entry.getValue()).endObject();
+        }
+
+        return json.endArray().endObject().toString();
+    }
 
 }
