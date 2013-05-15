@@ -30,16 +30,18 @@ class ScalaStatsContainerSpecs extends WordSpec with ShouldMatchers {
       PillageStats.metrics.get("test-timer.millis").getSum() should be < (1000L)
       
     }
-    
-    "register a gauge" in {
-      PillageStats.gauge("test.gauge", 6d * math.random)
-      
-      val d :Double = PillageStats.getSummary.getGauges.get("test.gauge") 
-      d should be > (0D)
-      
-      val d2 :Double = PillageStats.getSummary.getGauges.get("test.gauge")
-      
-      d should not be (d2)
+
+    "register a gauge with curried method" in {
+      PillageStats.gauge("tester2.gauge"){
+        666d * math.random
+      }
+
+      val d1 :Double = PillageStats.getSummary.getGauges.get("tester2.gauge")
+      d1 should be > (0d)
+
+      val d2 :Double = PillageStats.getSummary.getGauges.get("tester2.gauge")
+      d1 should not be (d2)
+
     }
     
     

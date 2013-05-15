@@ -1,3 +1,7 @@
+[2013-05-15]
+56.1
+  * refactored scala gauge method to be curried because it not being curring is stupid
+
 [2013-05-08]
 56.0
   * added new relic stats reporter

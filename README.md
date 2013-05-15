@@ -27,9 +27,10 @@ artifacts:
  + pillage-core 
  + pillage-groovy
  + pillage-scala
+ + pillage-new-relic
 
 version:
- + 35.0
+ + 56.1
 
 Components
 ----------
@@ -81,6 +82,7 @@ A StatsReporter has just one method report that takes in a StatsSummary. Multipl
  * GraphiteStatsReporter sends to Graphite over TCP
  * GMetricStatsReporter sends stats to Ganaglia using the gmetric command line tool ( Not the best, but useful if UDP is unavailable )
  * ConsoleStatsReporter sends stats to System.out
+ * NewRelicReporter records a StatsSummery to the new relic api
 
 ### PeriodicStatsCollector
 This is a utility singleton that can be used to schedule regular calls to collect() for a given StatsCollector.
