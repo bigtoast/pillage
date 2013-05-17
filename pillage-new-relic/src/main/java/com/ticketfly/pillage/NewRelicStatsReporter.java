@@ -25,17 +25,17 @@ public class NewRelicStatsReporter implements StatsReporter {
 
     public void report( StatsSummary stats ) {
         for (Map.Entry<String,Long> stat : stats.getCounters().entrySet() ) {
-            NewRelic.recordMetric(stat.getKey(), stat.getValue().floatValue());
+            NewRelic.recordMetric("Custom/" + stat.getKey().replaceAll(".","_"), stat.getValue().floatValue());
         }
 
         for (Map.Entry<String,Distribution> dist :stats.getMetrics().entrySet() ){
             for( Map.Entry<String,Number> stat :dist.getValue().toMap().entrySet() ) {
-                NewRelic.recordMetric(stat.getKey(), stat.getValue().floatValue());
+                NewRelic.recordMetric("Custom/" + stat.getKey().replaceAll(".","_"), stat.getValue().floatValue());
             }
         }
 
         for (Map.Entry<String,Double> stat :stats.getGauges().entrySet() ){
-            NewRelic.recordMetric(stat.getKey(), stat.getValue().floatValue());
+            NewRelic.recordMetric("Custom/" + stat.getKey().replaceAll(".","_"), stat.getValue().floatValue());
         }
 
     }

@@ -1,3 +1,11 @@
+[2013-05-16]
+56.3
+  * More crap for new relic. I hate new relic even more.
+
+[2013-05-16]
+56.2
+  * Added undocumented "Custom/" prefix to stupid fucking new relic reporter. I hate new relic.
+
 [2013-05-15]
 56.1
   * refactored scala gauge method to be curried because it not being curring is stupid
