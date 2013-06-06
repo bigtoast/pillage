@@ -25,18 +25,46 @@ public class NewRelicStatsReporter implements StatsReporter {
 
     public void report( StatsSummary stats ) {
         for (Map.Entry<String,Long> stat : stats.getCounters().entrySet() ) {
-            NewRelic.recordMetric("Custom/" + stat.getKey().replaceAll(".","_"), stat.getValue().floatValue());
+            NewRelic.recordMetric(format(stat.getKey()), stat.getValue().floatValue());
         }
 
         for (Map.Entry<String,Distribution> dist :stats.getMetrics().entrySet() ){
             for( Map.Entry<String,Number> stat :dist.getValue().toMap().entrySet() ) {
-                NewRelic.recordMetric("Custom/" + stat.getKey().replaceAll(".","_"), stat.getValue().floatValue());
+                NewRelic.recordMetric(format(stat.getKey()), stat.getValue().floatValue());
             }
         }
 
         for (Map.Entry<String,Double> stat :stats.getGauges().entrySet() ){
-            NewRelic.recordMetric("Custom/" + stat.getKey().replaceAll(".","_"), stat.getValue().floatValue());
+            NewRelic.recordMetric(format(stat.getKey()), stat.getValue().floatValue());
         }
 
+    }
+
+    /** convert a metric name into new relic's stupid non standard strict crappy
+     * format. This converts all periods to / and converts words to CamelCase where
+     * the second, thrird.. part of camel case are words when _ is dropped.. Also
+     * "Custom" is prepended.. lamo
+     *
+     * "api-req.best-available.p95" is converted to
+     * "Custom/ApiReq/BestAvailable/P95"
+     *
+     * @param metric name
+     * @return formatted name
+     */
+    public String format(String name) {
+        StringBuilder sb = new StringBuilder("Custom");
+        for ( String sub : name.split("\\.") ){
+            if ( sub.length() > 0 ) {
+                sb.append("/");
+                for ( String subSub : sub.split("-") ) {
+                    if ( subSub.length() > 0 ) {
+                        sb.append(Character.toUpperCase(subSub.charAt(0)));
+                        sb.append(subSub.substring(1));
+                    }
+                }
+            }
+        }
+
+        return sb.toString();
     }
 }
