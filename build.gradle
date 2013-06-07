@@ -18,7 +18,7 @@ allprojects {
 
         ext.sourceCompatibility = JavaVersion.VERSION_1_6
 
-        version = '58.0'
+        version = '58.1'
 
         group = "com.ticketfly"
 
@@ -41,7 +41,7 @@ subprojects {
 	
 	task publishDocs(type: Copy, dependsOn: "javadoc") {
 		from 'build/docs'
-		into '../../ticketfly.github.com/docs/pillage-core/58.0'
+		into '../../ticketfly.github.com/docs/pillage-core/58.1'
 	}
 	
 	repositories {

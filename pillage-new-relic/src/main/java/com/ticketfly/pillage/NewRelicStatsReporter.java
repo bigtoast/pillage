@@ -30,7 +30,7 @@ public class NewRelicStatsReporter implements StatsReporter {
 
         for (Map.Entry<String,Distribution> dist :stats.getMetrics().entrySet() ){
             for( Map.Entry<String,Number> stat :dist.getValue().toMap().entrySet() ) {
-                NewRelic.recordMetric(format(stat.getKey()), stat.getValue().floatValue());
+                NewRelic.recordMetric(format(dist.getKey() + "." + stat.getKey()), stat.getValue().floatValue());
             }
         }
 
