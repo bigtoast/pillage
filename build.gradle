@@ -18,7 +18,7 @@ allprojects {
 
         ext.sourceCompatibility = JavaVersion.VERSION_1_6
 
-        version = '58.1'
+        version = '61.0'
 
         group = "com.ticketfly"
 
@@ -41,7 +41,7 @@ subprojects {
 	
 	task publishDocs(type: Copy, dependsOn: "javadoc") {
 		from 'build/docs'
-		into '../../ticketfly.github.com/docs/pillage-core/58.1'
+		into '../../ticketfly.github.com/docs/pillage-core/61.0'
 	}
 	
 	repositories {
@@ -49,10 +49,9 @@ subprojects {
 	}
 	
 	dependencies {
-	    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.8'
-	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.5-groovy-1.7' ){
-			exclude(group: 'org.codehaus.groovy', module: 'groovy-all')
-		}
+	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.7-groovy-2.0' )
+
+        testCompile( group: 'org.codehaus.groovy', name: 'groovy', version: '2.+' )
 	}
 
 	idea.module.iml {

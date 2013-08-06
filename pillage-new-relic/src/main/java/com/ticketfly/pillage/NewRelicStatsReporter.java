@@ -42,7 +42,7 @@ public class NewRelicStatsReporter implements StatsReporter {
 
     /** convert a metric name into new relic's stupid non standard strict crappy
      * format. This converts all periods to / and converts words to CamelCase where
-     * the second, thrird.. part of camel case are words when _ is dropped.. Also
+     * the second, third.. part of camel case are words when _ is dropped.. Also
      * "Custom" is prepended.. lamo
      *
      * "api-req.best-available.p95" is converted to

@@ -17,7 +17,6 @@
 package com.ticketfly.pillage;
 
 import com.ticketfly.pillage.org.json.JSONException;
-import com.ticketfly.pillage.org.json.JSONObject;
 import com.ticketfly.pillage.org.json.JSONStringer;
 
 import java.util.Map;
@@ -66,15 +65,14 @@ public class StatUtils {
         json.endArray().key("metrics").array();
 
         for ( Map.Entry<String,Distribution> entry : stats.getMetrics().entrySet() ) {
-            json.object()
-                .key(entry.getKey());
+            json.object().key(entry.getKey()).object();
 
             Map<String,Number> metrics = entry.getValue().toMap();
             for ( Map.Entry<String,Number> metric : metrics.entrySet() ) {
-                json.object().key(metric.getKey()).value(metric.getValue()).endObject();
+                json.key(metric.getKey()).value(metric.getValue());
             }
 
-            json.endObject();
+            json.endObject().endObject();
         }
 
         json.endArray().key("labels").array();

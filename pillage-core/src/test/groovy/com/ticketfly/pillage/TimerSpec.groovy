@@ -61,6 +61,7 @@ class TimerSpec extends Specification {
         def timer = new Timer(provider, "test timer", true)
 
       when: "stopAndStart is called"
+        Thread.sleep(50)
         elapsed = timer.stopAndStart("i will not be dropped").intValue();
 
       then: "A metric should be added"

@@ -1,3 +1,9 @@
+[2013-08-06]
+61.0
+ * Fixed toString in StatsSummary
+ * Updated groovy to 2.+
+ * Updated Spock to 0.7 groovy 2.+
+
 [2013-06-06]
 58.1
  * ugh.. more new relic issues
