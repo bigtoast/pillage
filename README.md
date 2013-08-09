@@ -30,7 +30,7 @@ artifacts:
  + pillage-new-relic
 
 version:
- + 56.1
+ + 61.0
 
 Components
 ----------
