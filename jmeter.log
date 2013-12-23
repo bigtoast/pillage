@@ -1,0 +1,73 @@
+2012/07/13 10:07:21 INFO  - jmeter.util.JMeterUtils: Setting Locale to en_US 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: Loading user properties from: /usr/local/Cellar/jmeter/2.7/libexec/bin/user.properties 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: Loading system properties from: /usr/local/Cellar/jmeter/2.7/libexec/bin/system.properties 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: Copyright (c) 1998-2012 The Apache Software Foundation 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: Version 2.7 r1342410 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: java.version=1.6.0_33 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: os.name=Mac OS X 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: os.arch=x86_64 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: os.version=10.7.4 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: file.encoding=MacRoman 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: Default Locale=English (United States) 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: JMeter  Locale=English (United States) 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: JMeterHome=/usr/local/Cellar/jmeter/2.7/libexec 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: user.dir  =/Users/andrew/Projects/BigToast/pillage 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: PWD       =/Users/andrew/Projects/BigToast/pillage 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: IP: 10.56.10.83 Name: andrews-MacBook-Pro.local FullName: 10.56.10.83 
+2012/07/13 10:07:21 INFO  - jmeter.JMeter: Loaded icon properties from org/apache/jmeter/images/icon.properties 
+2012/07/13 10:07:21 INFO  - jmeter.engine.util.CompoundVariable: Note: Function class names must contain the string: '.functions.' 
+2012/07/13 10:07:21 INFO  - jmeter.engine.util.CompoundVariable: Note: Function class names must not contain the string: '.gui.' 
+2012/07/13 10:07:22 INFO  - jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLookAndFeel [Mac OS X, System] 
+2012/07/13 10:07:22 INFO  - jmeter.util.BSFTestElement: Registering JMeter version of JavaScript engine as work-round for BSF-22 
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Cannot find .className property for htmlParser, using default 
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/html is  
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for application/xhtml+xml is  
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for application/xml is  
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/xml is  
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser 
+2012/07/13 10:07:22 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Reuse SSL session context on subsequent iterations: true 
+2012/07/13 10:07:22 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.protocol.http.modifier.gui.ParamModifierGui 
+2012/07/13 10:07:23 INFO  - jmeter.samplers.SampleResult: Note: Sample TimeStamps are START times 
+2012/07/13 10:07:23 INFO  - jmeter.samplers.SampleResult: sampleresult.default.encoding is set to ISO-8859-1 
+2012/07/13 10:07:23 INFO  - jmeter.samplers.SampleResult: sampleresult.useNanoTime=true 
+2012/07/13 10:07:23 INFO  - jmeter.samplers.SampleResult: sampleresult.nanoThreadSleep=5000 
+2012/07/13 10:07:26 INFO  - jmeter.services.FileServer: Default base='/Users/andrew/Projects/BigToast/pillage' 
+2012/07/13 10:07:26 INFO  - jmeter.gui.action.Load: Loading file: /Users/andrew/Projects/Ticketfly/tfly-jmeter-tests/diva/Create Capitol Theater event layout.jmx 
+2012/07/13 10:07:26 INFO  - jmeter.services.FileServer: Set new base='/Users/andrew/Projects/Ticketfly/tfly-jmeter-tests/diva' 
+2012/07/13 10:07:27 INFO  - jmeter.save.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2 
+2012/07/13 10:07:27 INFO  - jmeter.save.SaveService: Using SaveService properties file encoding UTF-8 
+2012/07/13 10:07:27 INFO  - jmeter.save.SaveService: Using SaveService properties file version 1332608 
+2012/07/13 10:07:27 INFO  - jmeter.save.SaveService: Using SaveService properties version 2.3 
+2012/07/13 10:07:27 INFO  - jmeter.save.SaveService: All converter versions present and correct 
+2012/07/13 10:07:27 INFO  - jmeter.services.FileServer: Set new base='/Users/andrew/Projects/Ticketfly/tfly-jmeter-tests/diva' 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Listeners will be started after enabling running version 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2012/07/13 10:07:59 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Starting 1 threads for group Create Layout then allocate. 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2012/07/13 10:07:59 INFO  - jmeter.threads.JMeterThread: jmeterthread.startearlier=true (see jmeter.properties) 
+2012/07/13 10:07:59 INFO  - jmeter.threads.JMeterThread: Running PostProcessors in forward order 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: All threads have been started 
+2012/07/13 10:07:59 INFO  - jmeter.threads.JMeterThread: Thread started: Create Layout then allocate 1-1 
+2012/07/13 10:07:59 ERROR - jmeter.threads.JMeterThread: Test failed! java.lang.NoClassDefFoundError: com/ticketfly/thrift/client/ThriftClientConnectionPool$ThriftClientConnectionPoolBuilder
+	at com.ticketfly.testtools.diva.connectionPool.InventoryManagementServiceClientPool.getClientPool(InventoryManagementServiceClientPool.java:31)
+	at com.ticketfly.testtools.diva.samplers.CreateCapitolTheaterEventLayout.setupTest(CreateCapitolTheaterEventLayout.java:131)
+	at org.apache.jmeter.protocol.java.sampler.JavaSampler.sample(JavaSampler.java:165)
+	at org.apache.jmeter.threads.JMeterThread.process_sampler(JMeterThread.java:442)
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:271)
+	at java.lang.Thread.run(Thread.java:680)
+Caused by: java.lang.ClassNotFoundException: com.ticketfly.thrift.client.ThriftClientConnectionPool$ThriftClientConnectionPoolBuilder
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	... 6 more
+
+2012/07/13 10:07:59 INFO  - jmeter.threads.JMeterThread: Thread finished: Create Layout then allocate 1-1 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Ending thread Create Layout then allocate 1-1 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2012/07/13 10:07:59 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2012/07/13 10:07:59 INFO  - jmeter.engine.StandardJMeterEngine: Test has ended on host null 
