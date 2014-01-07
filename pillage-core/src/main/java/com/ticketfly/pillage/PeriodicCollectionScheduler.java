@@ -60,7 +60,11 @@ public class PeriodicCollectionScheduler {
 
 		@Override
 		public void run() {
-			collector.collect();
+            try {
+			    collector.collect();
+            } catch( Exception e ) {
+                // nothing
+            }
 		}
 	}
 

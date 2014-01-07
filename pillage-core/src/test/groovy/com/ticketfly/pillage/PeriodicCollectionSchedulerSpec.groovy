@@ -18,6 +18,7 @@ import spock.lang.*
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 class PeriodicCollectionSchedulerSpec extends Specification {
 	
@@ -29,7 +30,6 @@ class PeriodicCollectionSchedulerSpec extends Specification {
 			CountDownLatch latch = new CountDownLatch(2);
 			collector.collect() >> { latch.countDown() }
 			
-			
 		when:
 			scheduler.scheduleCollection(collector, 1, TimeUnit.SECONDS);
 			
@@ -38,5 +38,25 @@ class PeriodicCollectionSchedulerSpec extends Specification {
 			true
 				
 	}
+
+    def "An exception thrown in a gauge should not kill the scheduler thread"(){
+        given:
+            StatsCollector collector = Mock()
+            AtomicInteger i = new AtomicInteger(0)
+            collector.collect() >> {
+                if ( i.incrementAndGet() == 1 ) {
+                    println("throwing yo")
+                    throw new RuntimeException("Thread Death")
+                }
+            }
+
+        when:
+            scheduler.scheduleCollection(collector, 1, TimeUnit.SECONDS)
+            Thread.sleep(3000)
+
+        then:
+            i.get() > 1
+
+    }
 	
 }

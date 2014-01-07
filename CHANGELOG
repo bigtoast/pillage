@@ -1,3 +1,8 @@
+[2014-01-07]
+82.0
+ * Added try/catch & test in collect of PeriodicCollectionScheduler.
+   An exception would kill the scheduler thread and reporting would stop :-(
+
 [2013-08-06]
 61.0
  * Fixed toString in StatsSummary
