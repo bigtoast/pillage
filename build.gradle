@@ -18,7 +18,7 @@ allprojects {
 
         ext.sourceCompatibility = JavaVersion.VERSION_1_6
 
-        version = '82.0-Tfly'
+        version = '83.0-Tfly'
 
         group = "com.ticketfly"
 
@@ -26,7 +26,7 @@ allprojects {
 
 
 subprojects {
- 
+
     apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -38,16 +38,16 @@ subprojects {
 			}
 		}
 	}
-	
+
 	task publishDocs(type: Copy, dependsOn: "javadoc") {
 		from 'build/docs'
 		into '../../ticketfly.github.com/docs/pillage-core/82.0-Tfly'
 	}
-	
+
 	repositories {
         mavenCentral()
 	}
-	
+
 	dependencies {
 	    testCompile( group: 'org.spockframework', name: 'spock-core', version: '0.7-groovy-2.0' )
 
