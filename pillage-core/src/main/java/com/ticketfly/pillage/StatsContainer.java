@@ -42,6 +42,11 @@ public interface StatsContainer {
   public void incr(String name);
 
   /**
+   * Increments an integral counter by one
+   */   
+  public void incrementIntegral(String name, int increment);
+
+  /**
    * Set a label to a string.
    */
   public void set(String name, String value);
@@ -65,11 +70,13 @@ public interface StatsContainer {
    * @param name
    */
   public void clearCounter(String name);
-  
+
   /**
-   * Get the Counter object representing a named counter.
+   * Get (or create) the Counter object representing a named counter.
    */
   public Counter getCounter(String name);
+ 
+  public Counter getCounter(String name, ReportingMode mode);
 
   /**
    * Get the Metric object representing a named metric.
@@ -92,7 +99,12 @@ public interface StatsContainer {
   /**
    * evaluate all the counters in this collection.
    */
-  public Map<String,Long> counters();
+  public Map<String, Long> counters();
+
+  /**
+   * evaluate all the counters in this collection, including reporting mode.
+   */
+  public Map<String, ReportingInstance> getReportingInstances();
 
   /**
    * evaluate all the metrics in this collection.

@@ -38,13 +38,14 @@ class StatsCollectorImplSpec extends Specification {
 		given:
 			StatsContainer container = Mock()
 			container.counters() >> { [:] }
+			container.getReportingInstances() >> { [:] }
 			container.metrics() >> { [:] }
 			container.gauges() >> { [:] }
 			def collector = new StatsCollectorImpl(container)
 		when:
 			collector.collect()
 		then:
-			1 * container.counters() >> { [:] }
+			1 * container.getReportingInstances() >> { [:] }
 			1 * container.metrics() >> { [:] }
 	}
 	
@@ -64,6 +65,7 @@ class StatsCollectorImplSpec extends Specification {
 		given:
 			StatsContainer container = Mock()
 			container.counters() >> { [:] }
+			container.getReportingInstances() >> { [:] }
 			container.metrics() >> { [:] }
 			container.gauges() >> { [:] }
 			container.getSummary() >> { new StatsSummary([:], [:], [:]) }
@@ -80,6 +82,7 @@ class StatsCollectorImplSpec extends Specification {
 		given:
 			StatsContainer container = Mock()
 			container.counters() >> { [:] }
+			container.getReportingInstances() >> { [:] }
 			container.metrics() >> { [:] }
 			container.gauges() >> { [:] }
 			container.getSummary() >> { new StatsSummary([:], [:], [:]) }
