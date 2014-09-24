@@ -58,16 +58,24 @@ public class StatsContainerImpl implements StatsContainer {
 	 */
 	@Override
 	public void incr(String name, int count) {
-		getCounter(name).incr(count);
+		getCounter(name, ReportingMode.DIFFERENTIAL).incr(count);
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void incr(String name) {
-		getCounter(name).incr();
-	}
+     * {@inheritDoc}
+     */
+    @Override
+    public void incrementIntegral(String name, int increment) {
+        getCounter(name, ReportingMode.INTEGRAL).incr(increment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void incr(String name) {
+        getCounter(name, ReportingMode.DIFFERENTIAL).incr();
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -137,14 +145,27 @@ public class StatsContainerImpl implements StatsContainer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Counter getCounter(String name) {
+	public Counter getCounter(String name, ReportingMode mode) {
 		Counter counter = counterMap.get(name);
 		if (counter == null) {
-			counterMap.putIfAbsent(name, new Counter());
+			counterMap.putIfAbsent(name, new Counter(mode));
 			counter = counterMap.get(name);
 		}
 		return counter;
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Counter getCounter(String name) {
+        Counter counter = counterMap.get(name);
+        if (counter == null) {
+            counterMap.putIfAbsent(name, new Counter(ReportingMode.DIFFERENTIAL));
+            counter = counterMap.get(name);
+        }
+        return counter;
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -186,6 +207,20 @@ public class StatsContainerImpl implements StatsContainer {
 		}
 		return map;
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, ReportingInstance > getReportingInstances() {
+        HashMap<String, ReportingInstance> map = new HashMap<String, ReportingInstance>(counterMap.size());
+        for (Map.Entry<String, Counter> entry : counterMap.entrySet()) {
+            map.put(entry.getKey(), new ReportingInstance(entry.getValue().value(), entry.getValue().getReportingMode()));
+        }
+        return map;
+    }
+    
+    
 
 	/**
 	 * {@inheritDoc}

@@ -25,13 +25,20 @@ public class Counter {
 
     private AtomicLong counter = new AtomicLong(0L);
 
+    private ReportingMode reportingMode = ReportingMode.DIFFERENTIAL;
+
     public long incr(){  return counter.incrementAndGet(); }
     public long incr( int i ){ return counter.addAndGet(i); }
     public long value(){ return counter.get(); }
     public void update(long l){ counter.set(l); }
     public void reset() { counter.set(0); }
+    public void setReportingMode(ReportingMode mode) { reportingMode = mode; }
+    public ReportingMode getReportingMode() { return reportingMode; }
 
     @Override
     public String toString() { return "Counter[" + counter.get() + "]"; }
-
+    
+    public Counter(ReportingMode mode) {
+        reportingMode = mode;
+    }
 }

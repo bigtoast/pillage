@@ -47,6 +47,10 @@ public class AsyncStatsContainer implements StatsContainer {
 					  IncCounter c = (IncCounter) command;
 					  container.incr(c.name, c.value);
 				  }
+				  else if ( command instanceof IncrementIntegralCounter ){
+					  IncrementIntegralCounter c = (IncrementIntegralCounter) command;
+					  container.incrementIntegral(c.name, c.value);
+				  }
 				  else if ( command instanceof ClearCounter ){
 					  ClearCounter c = (ClearCounter) command;
 					  container.clearCounter(c.name);
@@ -114,6 +118,15 @@ public class AsyncStatsContainer implements StatsContainer {
 			this.value = value;
 		}
 	}
+
+    private static class IncrementIntegralCounter implements StatsCommand {
+        final public String name;
+        final public int value;
+        IncrementIntegralCounter(String name, int value){
+            this.name = name;
+            this.value = value;
+        }
+    }
 	
 	private static class ClearCounter implements StatsCommand{
 	    final public String name;
@@ -153,6 +166,11 @@ public class AsyncStatsContainer implements StatsContainer {
 		queue.offer(new IncCounter(name, count));
 
 	}
+    
+    @Override
+    public void incrementIntegral(String name, int count) {
+       queue.offer(new IncrementIntegralCounter(name, count));
+    }
 
 	@Override
 	public void incr(String name) {
@@ -179,9 +197,14 @@ public class AsyncStatsContainer implements StatsContainer {
 		queue.offer( new ClearCounter(name) );
 	}
 
+    @Override
+    public Counter getCounter(String name) {
+            return container.getCounter(name);
+    }
+
 	@Override
-	public Counter getCounter(String name) {
-		return container.getCounter(name);
+	public Counter getCounter(String name, ReportingMode mode) {
+		return container.getCounter(name, mode);
 	}
 
 	@Override
@@ -204,7 +227,12 @@ public class AsyncStatsContainer implements StatsContainer {
 		return container.counters();
 	}
 
-	@Override
+    @Override
+    public Map<String, ReportingInstance> getReportingInstances() {
+        return container.getReportingInstances();
+    }
+
+    @Override
 	public Map<String, Distribution> metrics() {
 		return container.metrics();
 	}

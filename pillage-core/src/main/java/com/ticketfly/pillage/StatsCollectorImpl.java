@@ -161,14 +161,20 @@ public class StatsCollectorImpl implements StatsCollector {
         Map<String, Long> deltas = new HashMap<String, Long>();
         synchronized (this) {
 
-            for (Map.Entry<String, Long> entry : container.counters().entrySet()) {
+            for (Map.Entry<String, ReportingInstance > instanceEntry : container.getReportingInstances().entrySet()) {
                 long lastValue = 0;
-                if (lastCounterMap.containsKey(entry.getKey()))
-                	lastValue = lastCounterMap.get(entry.getKey());
-                
-                deltas.put(entry.getKey(), StatUtils.delta(lastValue, entry.getValue()));
-                lastCounterMap.put(entry.getKey(), entry.getValue());
-            }
+                String counterName = instanceEntry.getKey();
+                long currentValue = instanceEntry.getValue().count;
+                if (lastCounterMap.containsKey(counterName)) {
+                    lastValue = lastCounterMap.get(counterName);
+                    if (instanceEntry.getValue().mode == ReportingMode.DIFFERENTIAL) {
+                        deltas.put(counterName, StatUtils.delta(lastValue, currentValue));
+                    } else {
+                        deltas.put(counterName, currentValue);
+                    }
+                }
+                lastCounterMap.put(counterName, currentValue);
+           }
         }
         deltaCounterMap = deltas;
     }
