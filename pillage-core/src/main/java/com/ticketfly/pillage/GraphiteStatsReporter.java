@@ -26,6 +26,7 @@ import java.util.Map;
 
 public class GraphiteStatsReporter implements StatsReporter {
 
+	private String prefix = null;
 	private String hostName;
 	private InetAddress graphiteAddress;
 	private int port;
@@ -37,6 +38,14 @@ public class GraphiteStatsReporter implements StatsReporter {
 		this.hostName = hostName;
 	}
 
+	public GraphiteStatsReporter(String graphiteHost, int port, String hostName, String prefix)
+			throws UnknownHostException {
+		this.graphiteAddress = InetAddress.getByName(graphiteHost);
+		this.port = port;
+		this.hostName = hostName;
+		this.prefix = prefix;
+	}
+
 	public GraphiteStatsReporter(String graphiteHost, int port)
 			throws UnknownHostException {
 		this(graphiteHost, port, InetAddress.getLocalHost().getHostName());
@@ -45,16 +54,21 @@ public class GraphiteStatsReporter implements StatsReporter {
 	private void reportMetric(Writer writer, String metric,
 			Distribution distribution) throws IOException {
 		for (Map.Entry<String, Number> entry : distribution.toMap().entrySet()) {
-			StringBuilder str = new StringBuilder(hostName);
-			str.append(".");
+           	StringBuilder str = new StringBuilder();
+           	if(prefix != null) {
+               str.append(prefix);
+               str.append('.');
+            }
+            str.append(hostName);
+			str.append('.');
 			str.append(metric);
-			str.append(".");
+			str.append('.');
 			str.append(entry.getKey());
-			str.append(" ");
+			str.append(' ');
 			str.append(entry.getValue().longValue());
-			str.append(" ");
+			str.append(' ');
 			str.append(timestamp());
-			str.append("\n");
+			str.append('\n');
 			writer.write(str.toString());
 		}
 	}
@@ -65,8 +79,13 @@ public class GraphiteStatsReporter implements StatsReporter {
 
 	private void reportLabel(Writer writer, String label, String value)
 			throws IOException {
-		StringBuilder str = new StringBuilder(hostName);
-		str.append(".");
+       	StringBuilder str = new StringBuilder();
+        if(prefix != null) {
+           str.append(prefix);
+           str.append('.');
+        }
+        str.append(hostName);
+        str.append(".");
 		str.append(label);
 		str.append(" ");
 		str.append(value);
@@ -78,7 +97,12 @@ public class GraphiteStatsReporter implements StatsReporter {
 
 	private void reportNumber(Writer writer, String name, Number value)
 			throws IOException {
-		StringBuilder str = new StringBuilder(hostName);
+       	StringBuilder str = new StringBuilder();
+        if(prefix != null) {
+           str.append(prefix);
+           str.append('.');
+        }
+        str.append(hostName);
 		str.append(".");
 		str.append(name);
 		str.append(" ");
