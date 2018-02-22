@@ -1,9 +1,7 @@
 
 apply plugin: 'groovy'
 
-dependsOn(':pillage-core')
-
 dependencies {
-    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '2.+'
+	compile "org.codehaus.groovy:groovy-all:2.3.11"
 	compile project(":pillage-core")
 }

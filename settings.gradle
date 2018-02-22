@@ -1,1 +1,4 @@
+rootProject.name = 'pillage'
+
 include 'pillage-core', 'pillage-groovy', 'pillage-scala', 'pillage-new-relic'
+

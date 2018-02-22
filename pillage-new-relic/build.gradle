@@ -1,6 +1,4 @@
 
-dependsOn(':pillage-core')
-
 dependencies {
     compile project(":pillage-core")
     compile group: "com.newrelic.agent.java", name: "newrelic-api", version :"3.10.0"
